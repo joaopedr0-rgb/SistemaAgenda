@@ -2,46 +2,60 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Cliente;
-use Illuminate\Http\Request;
+use App\Models\Cliente; // Importa o Model para interagir com o Banco de Dados
+use Illuminate\Http\Request; // Importa a classe que lida com dados de formulários/URL
 
 class ClientesController extends Controller
 {
-    
+    /**
+     * LISTAR CLIENTES (Read)
+     * Sintaxe: Cliente::orderBy(...)->get()
+     * Semântica: O Eloquent (ORM) faz um "SELECT * FROM clientes ORDER BY..." 
+     * e retorna uma Coleção. O compact('clientes') passa essa variável para a View index.
+     */
     public function index()
     {
-        $cliente = Cliente::all();
-        return view("clientes.index", compact('cliente'));
+        $clientes = Cliente::orderBy('created_at', 'desc')->get();
+        return view('clientes.index', compact('clientes'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * FORMULÁRIO DE CRIAÇÃO
+     * Semântica: Apenas carrega a página com o formulário vazio.
      */
     public function create()
     {
-        return view ('clientes.create');
+        return view('clientes.create');
     }
 
     /**
-     * Store a newly created resource in storage.
+     * SALVAR NO BANCO (Create)
+     * Sintaxe: $request->validate([...])
+     * Semântica: Camada de segurança. Se o 'nome' for menor que 3 letras, o Laravel 
+     * interrompe aqui e volta para o formulário com erros.
+     * O unique:clientes,email evita duplicidade de e-mail no banco.
      */
     public function store(Request $request)
     {
-        $validated = $request -> validate([
-            'nome' => 'required',
-            'email' => 'required|email|unique:_clientes,email',
-            'telefone' => 'nullable',
-            'status' => 'nullable',
+        $request->validate([
+            'nome'  => 'required|min:3',
+            'email' => 'required|email|unique:clientes,email',
+            'telefone' => 'nullable'
         ]);
 
-        Cliente::create($validated);
-        return redirect()->route('clientes.index');
+        // Mass Assignment: Cria o registro com todos os dados vindos do form.
+        Cliente::create($request->all());
+
+        // Redirecionamento com mensagem Flash (sessão temporária)
+        return redirect()->route('clientes.index')
+                         ->with('success', 'Cliente cadastrado com sucesso!');
     }
 
- 
-
     /**
-     * Show the form for editing the specified resource.
+     * FORMULÁRIO DE EDIÇÃO
+     * Sintaxe: public function edit(Cliente $cliente)
+     * Semântica: Route Model Binding. O Laravel recebe o ID pela URL, faz o 
+     * "SELECT * FROM clientes WHERE id = ?" automaticamente e já te entrega o objeto pronto.
      */
     public function edit(Cliente $cliente)
     {
@@ -49,22 +63,34 @@ class ClientesController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * ATUALIZAR DADOS (Update)
+     * Sintaxe: unique:clientes,email,' . $cliente->id
+     * Semântica: Diz ao validador para ignorar o e-mail do próprio cliente atual, 
+     * caso contrário, ele diria que o e-mail "já existe" ao tentar salvar sem alterá-lo.
      */
     public function update(Request $request, Cliente $cliente)
     {
+        $request->validate([
+            'nome'  => 'required|min:3',
+            'email' => 'required|email|unique:clientes,email,' . $cliente->id,
+        ]);
+
         $cliente->update($request->all());
-        $cliente->update($request->all()); 
-        return redirect()->route('clientes.index');
+
+        return redirect()->route('clientes.index')
+                         ->with('success', 'Dados atualizados!');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * EXCLUSÃO (Delete)
+     * Sintaxe: $cliente->delete()
+     * Semântica: Remove o registro do banco de dados. 
+     * Como usamos Route Model Binding, se o ID não existir, ele já retorna erro 404 sozinho.
      */
     public function destroy(Cliente $cliente)
     {
-        $cliente = Cliente::findOrFail($cliente->id);
         $cliente->delete();
-        return redirect()->route('clientes.index');
+        return redirect()->route('clientes.index')
+                         ->with('success', 'Cliente removido.');
     }
 }
