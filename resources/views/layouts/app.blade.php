@@ -33,7 +33,7 @@
         <div class="container">
             {{-- Link para a raiz do site --}}
             <a class="navbar-brand" href="/">
-                Sistema de Agenda - Clientes
+                Sistema de Agenda
             </a>
             
             {{-- Botão "Hambúrguer" para dispositivos móveis --}}
@@ -65,7 +65,7 @@
     {{-- Rodapé Estático --}}
     <footer class="bg-white border-top py-4 mt-5">
         <div class="container text-center text-muted">
-            <small>&copy; 2026 Agenda Arch - Todos os direitos reservados.</small>
+            <small>&copy; 2026 Sistema de Agenda - Todos os direitos reservados.</small>
         </div>
     </footer>
 

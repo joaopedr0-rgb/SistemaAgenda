@@ -16,7 +16,7 @@ use App\Http\Controllers\ProfissionaisController;
 */
 
 Route::get('/', function () {
-    return redirect()->route('clientes.index');
+    return redirect()->route('profissionais.index');
 });
 Route::resource('clientes', ClientesController::class);
 Route::resource('profissionais', ProfissionaisController::class);
