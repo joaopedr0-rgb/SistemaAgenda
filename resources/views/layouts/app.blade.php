@@ -33,7 +33,7 @@
         <div class="container">
             {{-- Link para a raiz do site --}}
             <a class="navbar-brand" href="/">
-                📅 Agenda Arch
+                Sistema de Agenda - Clientes
             </a>
             
             {{-- Botão "Hambúrguer" para dispositivos móveis --}}
