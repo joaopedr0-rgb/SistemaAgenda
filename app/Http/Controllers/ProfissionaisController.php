@@ -21,7 +21,7 @@ class ProfissionaisController extends Controller
      */
     public function create()
     {
-        return view ('profissionais.create');
+        return view('profissionais.create');
     }
 
     /**
@@ -29,10 +29,10 @@ class ProfissionaisController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request -> validate([
+        $validated = $request->validate([
             'nome' => 'required',
-            'CPF' => 'required|unique:_profissionais,CPF',
-            'email' => 'required|email|unique:_profissionais,email',
+            'CPF' => 'required|unique:profissionais,CPF',
+            'email' => 'required|email|unique:profissionais,email',
             'funcao' => 'required',
             'status' => 'nullable',
         ]);
@@ -55,18 +55,25 @@ class ProfissionaisController extends Controller
      */
     public function update(Request $request, Profissional $profissional)
     {
-        $profissional -> update($request -> all());
-       $profissional -> update($request -> all());
+        $profissional->update($request->all());
+        $profissional->update($request->all());
         return redirect()->route('profissionais.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Profissional $profissional)
+    // O nome da variável $profissional deve ser exatamente esse se você usa Route::resource
+// No seu ProfissionalController.php
+    public function destroy($id) // Recebe apenas o ID
     {
-        $profissional = Profissional::findOrFail($profissional->id);
-        $profissional->delete();
-        return redirect()->route('profissionais.index');
+        $profissional = Profissional::find($id);
+
+        if ($profissional) {
+            $profissional->delete();
+            return redirect()->route('profissionais.index')->with('success', 'Excluído!');
+        }
+
+        return redirect()->route('profissionais.index')->with('error', 'Não encontrado.');
     }
 }
