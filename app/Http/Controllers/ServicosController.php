@@ -12,7 +12,8 @@ class ServicosController extends Controller
      */
     public function index()
     {
-        
+        $servicos = Servico::all();
+        return view('servicos.index', compact('servicos'));
     }
 
     /**
@@ -20,7 +21,7 @@ class ServicosController extends Controller
      */
     public function create()
     {
-        //
+        return view('servicos.create');
     }
 
     /**
@@ -28,7 +29,15 @@ class ServicosController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nome' => 'required|string|max:255',
+            'preco' => 'required|numeric',
+            'duracao' => 'required|date_format:H:i:s',
+        ]);
+
+        Servico::create($request->all());
+
+        return redirect()->route('servicos.index') ->with('success', 'Serviço criado com sucesso.');
     }
 
     /**
@@ -44,7 +53,7 @@ class ServicosController extends Controller
      */
     public function edit(Servico $servico)
     {
-        //
+        return view('servicos.edit', compact('servico'));
     }
 
     /**
@@ -52,7 +61,15 @@ class ServicosController extends Controller
      */
     public function update(Request $request, Servico $servico)
     {
-        //
+        $request->validate([
+            'nome' => 'required|string|max:255',
+            'preco' => 'required|numeric',
+            'duracao' => 'required|date_format:H:i:s',
+        ]);
+
+        $servico->update($request->all());
+
+        return redirect()->route('servicos.index') ->with('success', 'Serviço atualizado com sucesso.');
     }
 
     /**
@@ -60,6 +77,8 @@ class ServicosController extends Controller
      */
     public function destroy(Servico $servico)
     {
-        //
+        $servico->delete();
+        
+        return redirect()->route('servicos.index') ->with('success', 'Serviço deletado com sucesso.');
     }
 }

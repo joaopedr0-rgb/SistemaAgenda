@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ClientesController;
 use App\Http\Controllers\ProfissionaisController;
+use App\Http\Controllers\ServicosController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,3 +21,4 @@ Route::get('/', function () {
 });
 Route::resource('clientes', ClientesController::class);
 Route::resource('profissionais', ProfissionaisController::class);
+Route::resource('servicos', ServicosController::class);
