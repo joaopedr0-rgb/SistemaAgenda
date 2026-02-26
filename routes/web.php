@@ -5,6 +5,7 @@ use App\Http\Controllers\ClientesController;
 use App\Http\Controllers\ProfissionaisController;
 use App\Http\Controllers\ServicosController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\CadastroController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +34,8 @@ Route::middleware(['auth'])->group(function(){
     Route::resource('profissionais', ProfissionaisController::class);
 });
 
+Route::get('/cadastro', [CadastroController::class, 'create'])->name('cadastro');
+Route::post('/cadastro', [CadastroController::class, 'store']);
 
 
 Route::get('/login', [LoginController::class, 'index'])->name('login');
