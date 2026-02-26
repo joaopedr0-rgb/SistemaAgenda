@@ -26,12 +26,15 @@ Route::middleware(['auth'])->group(function(){
     Route::resource('servicos', ServicosController::class);
 });
 
-Route::middleware(['auth', 'admin'])->group(function(){
+//Route::middleware(['auth', 'admin'])->group(function(){
+    //Route::resource('profissionais', ProfissionaisController::class);
+//});
+Route::middleware(['auth'])->group(function(){
     Route::resource('profissionais', ProfissionaisController::class);
 });
 
 
 
 Route::get('/login', [LoginController::class, 'index'])->name('login');
-Route::post('/login', [LoginController::class, 'authenticate']);
+Route::post('/login', [LoginController::class, 'authenticate'])->name('login.authenticate');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
