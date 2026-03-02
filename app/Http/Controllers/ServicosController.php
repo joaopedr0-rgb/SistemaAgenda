@@ -33,6 +33,7 @@ class ServicosController extends Controller
             'nome' => 'required|string|max:255',
             'preco' => 'required|numeric',
             'duracao' => 'required|date_format:H:i:s',
+            'status' => 'required|string|max:255',
         ]);
 
         Servico::create($request->all());
