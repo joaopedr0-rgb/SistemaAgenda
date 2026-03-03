@@ -83,6 +83,7 @@ class AgendamentosController extends Controller
      */
     public function destroy(Agendamento $agendamento)
     {
-        //
+        $agendamento->delete();
+        return redirect()->route('agendamentos.index');
     }
 }

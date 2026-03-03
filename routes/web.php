@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfissionaisController;
 use App\Http\Controllers\ServicosController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\CadastroController;
+use App\Http\Controllers\AgendamentosController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +26,7 @@ Route::get('/', function () {
 Route::middleware(['auth'])->group(function () {
     Route::resource('clientes', ClientesController::class)->parameters(['clientes' => 'cliente']);
     Route::resource('servicos', ServicosController::class)->parameters(['servicos'=> 'servico']);
+    Route::resource('agendamentos', AgendamentosController::class)->parameters([    'agendamentos' => 'agendamento']);
 });
 
 //Route::middleware(['auth', 'admin'])->group(function(){
