@@ -80,7 +80,7 @@ do arquivo base (app.blade.php), mantendo o cabeçalho e rodapé padrão.
 
                             <div class="d-flex justify-content-end gap-2 mt-3">
                                 {{-- Botão Voltar: Apenas um link estilizado --}}
-                                <a href="{{ route('profissionais.index') }}" class="btn btn-light px-4">Cancelar</a>
+                                <a href="{{ route('servicos.index') }}" class="btn btn-light px-4">Cancelar</a>
 
                                 {{--
                                 SINTAXE: type="submit"

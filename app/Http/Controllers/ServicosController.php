@@ -33,12 +33,11 @@ class ServicosController extends Controller
             'nome' => 'required|string|max:255',
             'preco' => 'required|numeric',
             'duracao' => 'required|numeric',
-            'status' => 'required|string|max:255',
         ]);
 
-        Servico::create($request->all());
+        Servico::create(array_merge($request->all(), ['status' => 'Ativo']));
 
-        return redirect()->route('servicos.index') ->with('success', 'Serviço criado com sucesso.');
+        return redirect()->route('servicos.index')->with('success', 'Serviço criado com sucesso.');
     }
 
     /**
@@ -65,12 +64,12 @@ class ServicosController extends Controller
         $request->validate([
             'nome' => 'required|string|max:255',
             'preco' => 'required|numeric',
-            'duracao' => 'required|date_format:H:i:s',
+            'duracao' => 'required|numeric',
         ]);
 
         $servico->update($request->all());
 
-        return redirect()->route('servicos.index') ->with('success', 'Serviço atualizado com sucesso.');
+        return redirect()->route('servicos.index')->with('success', 'Serviço atualizado com sucesso.');
     }
 
     /**
@@ -79,7 +78,7 @@ class ServicosController extends Controller
     public function destroy(Servico $servico)
     {
         $servico->delete();
-        
-        return redirect()->route('servicos.index') ->with('success', 'Serviço deletado com sucesso.');
+
+        return redirect()->route('servicos.index')->with('success', 'Serviço deletado com sucesso.');
     }
 }
