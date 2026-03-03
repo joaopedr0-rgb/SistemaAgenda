@@ -32,7 +32,7 @@ class ServicosController extends Controller
         $request->validate([
             'nome' => 'required|string|max:255',
             'preco' => 'required|numeric',
-            'duracao' => 'required|date_format:H:i:s',
+            'duracao' => 'required|numeric',
             'status' => 'required|string|max:255',
         ]);
 
