@@ -1,3 +1,4 @@
+
 {{--
 SINTAXE: @extends('layouts.app')
 SEMÂNTICA: Herança de template. Informa que esta view vai "preencher" as lacunas
@@ -99,3 +100,4 @@ do arquivo base (app.blade.php), mantendo o cabeçalho e rodapé padrão.
     </div>
 </div>
 @endsection
+
