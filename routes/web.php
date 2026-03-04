@@ -7,6 +7,7 @@ use App\Http\Controllers\ServicosController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\CadastroController;
 use App\Http\Controllers\AgendamentosController;
+use App\Http\Controllers\UsuarioController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,26 +26,24 @@ Route::get('/', function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('clientes', ClientesController::class)->parameters(['clientes' => 'cliente']);
-    Route::resource('servicos', ServicosController::class)->parameters(['servicos'=> 'servico']);
-    Route::resource('agendamentos', AgendamentosController::class)->parameters([    'agendamentos' => 'agendamento']);
+    Route::resource('servicos', ServicosController::class)->parameters(['servicos' => 'servico']);
+    Route::resource('agendamentos', AgendamentosController::class)->parameters(['agendamentos' => 'agendamento']);
 });
 
 //Route::middleware(['auth', 'admin'])->group(function(){
 //Route::resource('profissionais', ProfissionaisController::class);
 //});
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'admin'])->group(function () {
 
     // Procure a linha do Resource e adicione o array parameters
-    Route::resource('profissionais', ProfissionaisController::class)->parameters([
-        'profissionais' => 'profissional'
+    Route::resource('profissionais', ProfissionaisController::class)->parameters(['profissionais' => 'profissional']);
+    Route::resource('recepcionista', UsuarioController::class)->parameters(['recepcionista' => 'recepcionista']);
 
 
-    ]);
 });
 
 Route::get('/cadastro', [CadastroController::class, 'create'])->name('cadastro');
 Route::post('/cadastro', [CadastroController::class, 'store']);
-
 
 Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'authenticate'])->name('login.authenticate');

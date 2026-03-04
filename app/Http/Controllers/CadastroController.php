@@ -30,6 +30,7 @@ class CadastroController extends Controller
             'name' =>['required','string','max:255'],
             'email' => ['required', 'string', 'email', 'max:255','unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'is_admin' => true, // Define o campo is_admin como true para criar um usuário admin
         ]);
         $dados['password'] = Hash::make($dados['password']);
         User::create($dados);
