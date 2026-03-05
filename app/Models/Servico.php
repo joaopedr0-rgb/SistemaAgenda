@@ -13,5 +13,6 @@ class Servico extends Model
         'preco',
         'duracao',
         'status',
+        'descricao',
     ];
 }
