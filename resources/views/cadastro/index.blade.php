@@ -49,7 +49,7 @@
 
             <div class="mt-4 text-center">
                 <p class="text-muted mb-0">Já tem uma conta? 
-                    <a href="{{ route('profissionais.index') }}" class="text-primary fw-bold text-decoration-none">
+                    <a href="{{ route('login.index') }}" class="text-primary fw-bold text-decoration-none">
                         Faça login aqui
                     </a>
                 </p>
