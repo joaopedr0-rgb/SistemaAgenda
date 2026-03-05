@@ -14,6 +14,7 @@ class CheckAdmin
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
+    //NÃO MEXE AQUI TAMBEM\\
    public function handle(Request $request, Closure $next): Response
 {
     if (!auth()->check()) {

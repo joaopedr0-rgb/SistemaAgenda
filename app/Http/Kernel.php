@@ -23,6 +23,7 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
     ];
+    //NÃO MEXE AQUI, ISSO É O MIDDLEWARE ELE VERIFICA SE É ADMIN OU NÃO, NÃO MEXE
     protected $routeMiddleware = [
         'admin' => \App\Http\Middleware\CheckAdmin::class,
     ];

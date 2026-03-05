@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'is_admin', // Adicione o campo is_admin à lista de atributos preenchíveis
     ];
 
     /**

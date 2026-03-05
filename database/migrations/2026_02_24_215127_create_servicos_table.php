@@ -17,6 +17,7 @@ return new class extends Migration
             $table->decimal('preco', 8, 2);
             $table->time('duracao');
             $table->string('status')->default('ativo');
+            $table->string('descricao');
             $table->timestamps();
         });
     }

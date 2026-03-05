@@ -1,0 +1,61 @@
+@extends('layouts.app')
+
+@section('content')
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Gerenciar Recepcionistas</h2>
+            <a href="{{ route('recepcionista.create') }}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Nova Recepcionista
+            </a>
+        </div>
+
+        @if(session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>E-mail</th>
+                            <th>Data de Cadastro</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($recepcionistas as $recep)
+                            <tr>
+                                <td>{{ $recep->id }}</td>
+                                <td>{{ $recep->name }}</td>
+                                <td>{{ $recep->email }}</td>
+                                <td>{{ $recep->created_at->format('d/m/Y') }}</td>
+                                <td>
+                                    <a href="{{ route('recepcionista.edit', $recep->id) }}"
+                                        class="btn btn-sm btn-warning">Editar</a>
+                                    {{-- Botão de excluir pode ser adicionado aqui --}}
+                                </td>
+                                <td>
+                                    <form action="{{ route('recepcionista.destroy', $recep->id) }}" method="POST"
+                                        style="display: inline-block;">
+                                        @csrf
+                                        @method('DELETE') <button type="submit" class="btn btn-sm btn-danger"
+                                            onclick="return confirm('Tem a certeza que deseja excluir esta recepcionista? Esta ação não pode ser desfeita.')">
+                                            Excluir
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="text-center text-muted">Nenhuma recepcionista cadastrada.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+@endsection

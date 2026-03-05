@@ -33,6 +33,8 @@ class ServicosController extends Controller
             'nome' => 'required|string|max:255',
             'preco' => 'required|numeric',
             'duracao' => 'required|numeric',
+            'status' => 'required|string|max:255',
+            'descricao'=> 'required|string|max:255',
         ]);
 
         Servico::create(array_merge($request->all(), ['status' => 'Ativo']));
@@ -64,7 +66,10 @@ class ServicosController extends Controller
         $request->validate([
             'nome' => 'required|string|max:255',
             'preco' => 'required|numeric',
-            'duracao' => 'required|numeric',
+            'duracao' => 'required|date_format:H:i:s',
+            'status' => 'required|string|max:255',
+            'descricao'=> 'required|string|max:255',
+
         ]);
 
         $servico->update($request->all());
