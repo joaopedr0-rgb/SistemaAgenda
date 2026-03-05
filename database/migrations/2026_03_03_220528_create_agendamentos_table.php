@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        //essa tabela toda usa Foreingn Key, ela está sendo usada para criar os agendamentos que dependem dos clientes e profissionais, então quando um cliente ou profissional for deletado, os agendamentos relacionados a eles também serão deletados, por isso o cascadeOnDelete.
         Schema::create('agendamentos', function (Blueprint $table) {
             $table->id();
             $table ->foreignId('cliente_id')->constrained('clientes')->cascadeOnDelete();

@@ -19,7 +19,7 @@ use App\Http\Controllers\UsuarioController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
+//Aqui Bernardo, é toda a parte de login e cadastro, essas rota estão fora do middleware de autenticação porque o usuário precisa acessar elas sem estar logado.
 Route::get('/cadastro', [CadastroController::class, 'create'])->name('cadastro');
 Route::post('/cadastro', [CadastroController::class, 'store']);
 
@@ -27,7 +27,7 @@ Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'authenticate'])->name('login.authenticate');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-
+//Aqui estão as rotas protegidas por autenticação, ou seja, o usuário precisa estar logado para acessar essas páginas.
 Route::middleware(['auth'])->group(function () {
     Route::resource('clientes', ClientesController::class)->parameters(['clientes' => 'cliente']);
     Route::resource('servicos', ServicosController::class)->parameters(['servicos' => 'servico']);
@@ -37,12 +37,11 @@ Route::middleware(['auth'])->group(function () {
 });
 });
 
-//Route::middleware(['auth', 'admin'])->group(function(){
-//Route::resource('profissionais', ProfissionaisController::class);
-//});
+
+//Aqui estão as rotas protegidas por autenticação e autorização, ou seja, o usuário precisa estar logado e ser um administrador para acessar essas páginas.
 Route::middleware(['auth', 'admin'])->group(function () {
 
-    // Procure a linha do Resource e adicione o array parameters
+    
     Route::resource('profissionais', ProfissionaisController::class)->parameters(['profissionais' => 'profissional']);
     Route::resource('recepcionista', UsuarioController::class)->parameters(['recepcionista' => 'recepcionista']);
 
