@@ -58,7 +58,7 @@
                     <li class="nav-item"><a class="nav-link active" href="{{ route('clientes.index') }}">Clientes</a></li>
                     <li class="nav-item"><a class="nav-link active" href="{{ route('servicos.index') }}">Serviços</a></li>
                     <li class="nav-item"><a class="nav-link active" href="{{ route('agendamentos.index') }}">Agendamentos</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="{{ route('recepcionista.index') }}">Recepcionistas</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="{{ route('usuarios.index') }}">Usuarios</a></li>
                     <li class="nav-item ms-lg-3">
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
