@@ -9,9 +9,9 @@ use Illuminate\Http\Request;
 
 class AgendamentosController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
+
+
     public function index()
     {
         $agendamentos = Agendamento::all();
@@ -21,9 +21,9 @@ class AgendamentosController extends Controller
         return view('agendamento.index', compact('agendamentos', 'clientes', 'profissionais'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+
+
+
     public function create()
     {
         $clientes = Cliente::all();
@@ -32,9 +32,9 @@ class AgendamentosController extends Controller
         return view('agendamento.create', compact('clientes', 'profissionais'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
+
+
     public function store(Request $request)
     {
         $validated = $request -> validate([
@@ -47,14 +47,14 @@ class AgendamentosController extends Controller
         return redirect()->route('agendamentos.index');
     }
 
-    /**
-     * Display the specified resource.
-     */
+
+
+
    
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+
+
+
     public function edit(Agendamento $agendamento)
     {
         $clientes = Cliente::all();
@@ -63,9 +63,9 @@ class AgendamentosController extends Controller
         return view('agendamento.edit', compact('agendamento', 'clientes', 'profissionais'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+
+
+
     public function update(Request $request, Agendamento $agendamento)
     {
         $validated = $request -> validate([
@@ -78,9 +78,8 @@ class AgendamentosController extends Controller
         return redirect()->route('agendamentos.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+
+
     public function destroy(Agendamento $agendamento)
     {
         $agendamento->delete();

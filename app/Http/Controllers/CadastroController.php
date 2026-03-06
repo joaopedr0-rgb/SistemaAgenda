@@ -8,10 +8,10 @@ use Illuminate\Support\Facades\Hash;
 
 class CadastroController extends Controller
 {
-    /**
-     * Show the form for creating a new resource.
-     * Semântica: Exibe a tela de cadastro para o usuário.
-     */
+
+
+
+
     public function create()
     {
         // Sintaxe: retorna uma função auxiliar view().
@@ -19,9 +19,10 @@ class CadastroController extends Controller
         return view('cadastro.index');
     }
 
-    /**
-     * Store a newly created resource in storage.
+    /*
+     *
      * Semântica: Recebe os dados do formulário e salva no banco de dados.
+     *
      */
     public function store(Request $request)
     {
@@ -55,35 +56,21 @@ class CadastroController extends Controller
         return redirect()->route('clientes.index');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(User $user)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
+   
     public function edit(User $user)
     {
-        //
+	        
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+   
     public function update(Request $request, User $user)
     {
-        //
+        
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    
     public function destroy(User $user)
     {
-        //
+       
     }
 }

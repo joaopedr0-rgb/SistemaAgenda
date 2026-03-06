@@ -8,21 +8,16 @@ use Illuminate\Support\Facades\Hash;
 
 class UsuarioController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    
     public function index()
     {
         $usuarios = User::where('is_admin', false)->get();
         return view('usuarios.index', compact('usuarios')); // Criar uma view para listar os usuários
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
+   //Create Usuarios 
     public function create()
     {
-        return view('usuarios.create'); //criará uma view específica para cadastro de usuários, onde o Admin poderá escolher o tipo (Admin ou Recepcionista)
+        return view('usuarios.create'); //criará uma view específ:ica para cadastro de usuários, onde o Admin poderá escolher o tipo (Admin ou Recepcionista)
     }
 
     // Salva a recepcionista no banco
@@ -46,33 +41,21 @@ class UsuarioController extends Controller
         return redirect()->route('usuarios.index')->with('success', 'Usuário criado com sucesso!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(User $user)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
+        
     public function edit(User $user)
     {
-        //
+      return view('usuarios.edit',compact('usuarios'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, User $user)
     {
-        //
+    	$user->update($request->all());
+     	$user->update($request->all());
+	return redirect()->route('usuarios.index');
+
+
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(User $usuarios)
     {
         $usuarios->delete();
