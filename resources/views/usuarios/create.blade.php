@@ -18,7 +18,7 @@
                                 </ul>
                             </div>
                         @endif
-                        <form action="{{ route('recepcionista.store') }}" method="POST">
+                        <form action="{{ route('usuarios.store') }}" method="POST">
                             @csrf
 
                             <div class="mb-3">
@@ -53,7 +53,7 @@
                             </div>
 
                             <div class="d-flex justify-content-end gap-2">
-                                <a href="{{ route('recepcionista.index') }}" class="btn btn-secondary">Cancelar</a>
+                                <a href="{{ route('usuarios.index') }}" class="btn btn-secondary">Cancelar</a>
                                 <button type="submit" class="btn btn-success">Salvar Recepcionista</button>
                             </div>
                         </form>
