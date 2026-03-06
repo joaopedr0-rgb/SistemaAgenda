@@ -16,6 +16,7 @@ return new class extends Migration
             $table->id();
             $table ->foreignId('cliente_id')->constrained('clientes')->cascadeOnDelete();
             $table->foreignId('profissional_id')->constrained('profissionais')->cascadeOnDelete();
+            $table->foreignId('servico_id')->constrained('servicos')->cascadeOnDelete();
             $table->date('data')->nullable();
             $table->time('hora')->nullable();
             $table->timestamps();

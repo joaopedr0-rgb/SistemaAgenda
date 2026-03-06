@@ -21,6 +21,9 @@ class Agendamento extends Model
     public function profissional(){
         return $this->belongsTo('Profissional::class');
     }
+    public function servico(){
+        return $this->belongsTo('Servico::class');
+    }
     public function agendamento(){
         return $this->hasMany('Agendamento::class');
     }
