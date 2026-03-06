@@ -13,8 +13,8 @@ class UsuarioController extends Controller
      */
     public function index()
     {
-        $recepcionistas = User::where('is_admin', false)->get();
-        return view('recepcionista.index', compact('recepcionistas')); // Criar uma view para listar os usuários
+        $usuarios = User::where('is_admin', false)->get();
+        return view('usuarios.index', compact('usuarios')); // Criar uma view para listar os usuários
     }
 
     /**
@@ -22,7 +22,7 @@ class UsuarioController extends Controller
      */
     public function create()
     {
-        return view('recepcionista.create'); //criará uma view específica para cadastro de usuários, onde o Admin poderá escolher o tipo (Admin ou Recepcionista)
+        return view('usuarios.create'); //criará uma view específica para cadastro de usuários, onde o Admin poderá escolher o tipo (Admin ou Recepcionista)
     }
 
     // Salva a recepcionista no banco
@@ -43,7 +43,7 @@ class UsuarioController extends Controller
 
         
         // Redireciona o Admin de volta para a lista de usuários com uma mensagem de sucesso
-        return redirect()->route('recepcionista.index')->with('success', 'Usuário criado com sucesso!');
+        return redirect()->route('usuarios.index')->with('success', 'Usuário criado com sucesso!');
     }
 
     /**
@@ -73,13 +73,13 @@ class UsuarioController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $recepcionista)
+    public function destroy(User $usuarios)
     {
-        $recepcionista->delete();
+        $usuarios->delete();
 
         // 2. Apaga o registo
 
         // 3. Redireciona de volta para a lista com uma mensagem de sucesso
-        return redirect()->route('recepcionista.index')->with('success', 'Recepcionista excluída com sucesso!');
+        return redirect()->route('usuarios.index')->with('success', 'Recepcionista excluída com sucesso!');
     }
 }
