@@ -3,9 +3,9 @@
 @section('content')
     <div class="container mt-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2>Gerenciar Recepcionistas</h2>
-            <a href="{{ route('recepcionista.create') }}" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Nova Recepcionista
+            <h2>Gerenciar Usuarios</h2>
+            <a href="{{ route('usuarios.create') }}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Nova Usuarios
             </a>
         </div>
 
@@ -26,19 +26,19 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($recepcionistas as $recep)
+                        @forelse($usuarios as $us)
                             <tr>
-                                <td>{{ $recep->id }}</td>
-                                <td>{{ $recep->name }}</td>
-                                <td>{{ $recep->email }}</td>
-                                <td>{{ $recep->created_at->format('d/m/Y') }}</td>
+                                <td>{{ $us->id }}</td>
+                                <td>{{ $us->name }}</td>
+                                <td>{{ $us->email }}</td>
+                                <td>{{ $us->created_at->format('d/m/Y') }}</td>
                                 <td>
-                                    <a href="{{ route('recepcionista.edit', $recep->id) }}"
+                                    <a href="{{ route('usuarios.edit', $us->id) }}"
                                         class="btn btn-sm btn-warning">Editar</a>
                                     {{-- Botão de excluir pode ser adicionado aqui --}}
                                 </td>
                                 <td>
-                                    <form action="{{ route('recepcionista.destroy', $recep->id) }}" method="POST"
+                                    <form action="{{ route('usuarios.destroy', $us->id) }}" method="POST"
                                         style="display: inline-block;">
                                         @csrf
                                         @method('DELETE') <button type="submit" class="btn btn-sm btn-danger"
@@ -50,7 +50,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="text-center text-muted">Nenhuma recepcionista cadastrada.</td>
+                                <td colspan="5" class="text-center text-muted">Nenhum Usuario cadastrada.</td>
                             </tr>
                         @endforelse
                     </tbody>

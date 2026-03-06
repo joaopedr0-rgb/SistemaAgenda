@@ -43,7 +43,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     
     Route::resource('profissionais', ProfissionaisController::class)->parameters(['profissionais' => 'profissional']);
-    Route::resource('recepcionista', UsuarioController::class)->parameters(['recepcionista' => 'recepcionista']);
+    Route::resource('usuarios', UsuarioController::class)->parameters(['usuarios' => 'usuarios']);
 
 
 });
