@@ -32,16 +32,13 @@ class UsuarioController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-           
+             // O Admin escolhe o perfil no form
         ]);
-        User::create([
-        'name' => $dados['name'],
-        'email' => $dados['email'],
-        'password' => Hash::make($dados['password']),
-        'is_admin' => false, // Garante que é recepcionista no banco
-    ]);
 
-        
+        $dados['password'] = Hash::make($dados['password']);
+
+        User::create($dados);
+
         // Redireciona o Admin de volta para a lista de usuários com uma mensagem de sucesso
         return redirect()->route('usuarios.index')->with('success', 'Usuário criado com sucesso!');
     }

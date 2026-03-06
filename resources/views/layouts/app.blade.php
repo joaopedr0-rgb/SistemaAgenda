@@ -54,8 +54,11 @@
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link active" href="#">Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Contatos</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="{{ route('profissionais.index') }}">Profissionais</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="{{ route('clientes.index') }}">Clientes</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="{{ route('servicos.index') }}">Serviços</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="{{ route('agendamentos.index') }}">Agendamentos</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="{{ route('recepcionista.index') }}">Recepcionistas</a></li>
                     <li class="nav-item ms-lg-3">
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
