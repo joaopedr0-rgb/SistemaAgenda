@@ -4,6 +4,8 @@
 <div class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h3 class="fw-bold text-primary">Agendamentos</h3>
+        {{-- SINTAXE: route('agendamentos.create') --}}
+        {{-- SEMÂNTICA: Link dinâmico para o formulário de cadastro que analisamos anteriormente. --}}
         <a href="{{ route('agendamentos.create') }}" class="btn btn-primary shadow-sm">
             <i class="bi bi-plus-lg"></i> Novo Agendamento
         </a>
@@ -23,18 +25,37 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {{-- 
+                          SINTAXE: @forelse($colecao as $item) ... @empty ... @endforelse
+                          SEMÂNTICA: É um "foreach inteligente". Ele tenta repetir o bloco para cada agendamento. 
+                          Se a lista vier vazia do banco, ele pula direto para o bloco @empty.
+                        --}}
                         @forelse($agendamentos as $agendamento)
                         <tr>
+                            {{-- 
+                              SINTAXE: $agendamento->cliente->nome ?? 'N/A'
+                              SEMÂNTICA: Acessando Relacionamentos. O Eloquent vai na tabela de clientes buscar o nome. 
+                              O '??' garante que, se o cliente for nulo, apareça 'N/A' em vez de um erro de sistema.
+                            --}}
                             <td class="px-4 fw-bold">{{ $agendamento->cliente->nome ?? 'N/A' }}</td>
                             <td>{{ $agendamento->profissional->nome ?? 'N/A' }}</td>
+                            
+                            {{-- SINTAXE: \Carbon\Carbon::parse(...)->format('d/m/Y') --}}
+                            {{-- SEMÂNTICA: Formatação brasileira. Converte o padrão do banco (ano-mes-dia) para o nosso (dia/mes/ano). --}}
                             <td>{{ \Carbon\Carbon::parse($agendamento->data)->format('d/m/Y') }}</td>
                             <td>{{ \Carbon\Carbon::parse($agendamento->hora)->format('H:i') }}</td>
+                            
                             <td class="text-center">
                                 <div class="d-flex justify-content-center gap-2">
                                     <a href="{{ route('agendamentos.edit', $agendamento->id) }}" class="btn btn-sm btn-outline-warning">
                                         Editar
                                     </a>
                                     
+                                    {{-- 
+                                      SINTAXE: method('DELETE')
+                                      SEMÂNTICA: Assim como no Update usamos PUT, para excluir usamos o método DELETE. 
+                                      O formulário é necessário porque o navegador não faz DELETE via link simples (<a>).
+                                    --}}
                                     <form action="{{ route('agendamentos.destroy', $agendamento->id) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir?')">
                                         @csrf
                                         @method('DELETE')
@@ -45,6 +66,7 @@
                         </tr>
                         @empty
                         <tr>
+                            {{-- SEMÂNTICA: Feedback visual importante para o usuário quando não há registros. --}}
                             <td colspan="5" class="text-center py-5 text-muted">Nenhum agendamento encontrado.</td>
                         </tr>
                         @endforelse
