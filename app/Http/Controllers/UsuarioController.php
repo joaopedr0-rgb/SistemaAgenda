@@ -37,10 +37,9 @@ class UsuarioController extends Controller
          * SINTAXE: return view('caminho', compact('variavel'))
          * SEMÂNTICA: Renderiza a tela index e injeta a lista filtrada ($usuarios) para ser usada no HTML.
          */
-        return view('usuarios.index', compact('usuarios')); // Criar uma view para listar os usuários
+        return view('usuarios.index', compact('usuarios')); 
     }
 
-   //Create Usuarios 
     /*
      * SINTAXE: public function create()
      * SEMÂNTICA: Método GET. Entrega a página de formulário em branco para cadastrar novos usuários.
@@ -49,13 +48,11 @@ class UsuarioController extends Controller
     {
         /*
          * SINTAXE: return view('caminho')
-         * SEMÂNTICA: Apenas carrega o HTML. 
-         * (Nota de estudo: o seu comentário original menciona que o Admin poderá escolher o tipo, mas no método store abaixo, o sistema está forçando todos a serem recepcionistas. Vale a pena revisar essa regra de negócio depois!).
+         * SEMÂNTICA: Apenas carrega o HTML com o formulário de cadastro.
          */
-        return view('usuarios.create'); //criará uma view específ:ica para cadastro de usuários, onde o Admin poderá escolher o tipo (Admin ou Recepcionista)
+        return view('usuarios.create'); 
     }
 
-    // Salva a recepcionista no banco
     /*
      * SINTAXE: public function store(Request $request)
      * SEMÂNTICA: Método POST. Recebe os dados do formulário preenchido e tenta inseri-los no banco.
@@ -65,13 +62,12 @@ class UsuarioController extends Controller
         /*
          * SINTAXE: $request->validate([ regras ])
          * SEMÂNTICA: Protege a aplicação. Garante que campos obrigatórios existam, que o email seja válido e único, 
-         * e que a senha tenha no mínimo 8 caracteres e seja confirmada (campo password_confirmation no HTML).
+         * e que a senha tenha no mínimo 8 caracteres e seja confirmada.
          */
         $dados = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-           
         ]);
 
         /*
@@ -79,64 +75,85 @@ class UsuarioController extends Controller
          * SEMÂNTICA: Faz o "INSERT INTO" no banco de dados. Mapeia os dados validados ($dados) para as colunas da tabela.
          */
         User::create([
-        'name' => $dados['name'],
-        'email' => $dados['email'],
-        
-        /*
-         * SINTAXE: Hash::make(string)
-         * SEMÂNTICA: Criptografa a senha usando o algoritmo Bcrypt antes de salvar no banco de dados. Nunca salva em texto limpo.
-         */
-        'password' => Hash::make($dados['password']),
-        
-        /*
-         * SINTAXE: 'coluna' => boolean
-         * SEMÂNTICA: Força explicitamente no código que o usuário criado por esta rota será uma recepcionista, ignorando o que quer que tenha vindo do formulário.
-         */
-        'is_admin' => false, // Garante que é recepcionista no banco
-    ]);
+            'name' => $dados['name'],
+            'email' => $dados['email'],
+            
+            /*
+             * SINTAXE: Hash::make(string)
+             * SEMÂNTICA: Criptografa a senha usando o algoritmo Bcrypt antes de salvar no banco de dados.
+             */
+            'password' => Hash::make($dados['password']),
+            
+            /*
+             * SINTAXE: 'coluna' => boolean
+             * SEMÂNTICA: Força explicitamente que o usuário criado por esta rota será uma recepcionista (is_admin = false).
+             */
+            'is_admin' => false, 
+        ]);
 
-        
-        // Redireciona o Admin de volta para a lista de usuários com uma mensagem de sucesso
         /*
          * SINTAXE: redirect()->route('nome')->with('chave', 'mensagem')
-         * SEMÂNTICA: Após criar, joga o usuário de volta para a lista (index) e acopla uma mensagem Flash na sessão para o HTML exibir.
+         * SEMÂNTICA: Após criar, redireciona o usuário para a lista (index) com uma mensagem Flash de sucesso.
          */
         return redirect()->route('usuarios.index')->with('success', 'Usuário criado com sucesso!');
     }
 
     /*
-     * SINTAXE: public function edit(User $user)
-     * SEMÂNTICA: Route Model Binding. Busca o usuário que será editado pela URL (ex: /usuarios/3/edit) e o injeta na variável $user.
+     * SINTAXE: public function edit(User $usuarios)
+     * SEMÂNTICA: Route Model Binding. Busca o usuário pela URL. O parâmetro se chama $usuarios para agradar 
+     * a rota padrão do Laravel (usuarios/{usuarios}), evitando o erro "Missing required parameter".
      */
-    public function edit(User $user)
+    public function edit(User $usuarios)
     {
-      /*
-       * SINTAXE: return view('view', compact('variavel'))
-       * SEMÂNTICA: Renderiza o formulário preenchido.
-       * ⚠️ DICA DE ESTUDO (Atenção ao testar): O compact('usuarios') tenta enviar uma variável chamada $usuarios, mas o parâmetro recebido pelo método se chama $user. Quando for testar no navegador, isso gerará um erro "Undefined variable $usuarios". Para corrigir no futuro, você precisará mudar para compact('user').
-       */
-      return view('usuarios.edit',compact('usuarios'));
+        /*
+         * SINTAXE: return view('view', ['chave' => $variavel])
+         * SEMÂNTICA: Renderiza o formulário de edição. Passamos a variável $usuarios para a view usando 
+         * o nome 'user', assim o nosso HTML (que usa $user->name) funciona perfeitamente.
+         */
+        return view('usuarios.edit', ['user' => $usuarios]);
     }
 
     /*
-     * SINTAXE: public function update(Request $request, User $user)
-     * SEMÂNTICA: Método PUT/PATCH. Recebe o usuário atualizado ($request) e o usuário alvo no banco ($user).
+     * SINTAXE: public function update(Request $request, User $usuarios)
+     * SEMÂNTICA: Método PUT/PATCH. Recebe os novos dados ($request) e o usuário alvo no banco ($usuarios).
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, User $usuarios)
     {
         /*
-         * SINTAXE: $objeto->update($array_de_dados)
-         * SEMÂNTICA: Dispara o "UPDATE" no banco.
-         * ⚠️ DICA DE ESTUDO: Assim como no Controller de Profissionais, a linha está duplicada. O código funcionará, mas fará o "UPDATE" duas vezes seguidas no banco.
+         * SINTAXE: $request->validate([ regras ])
+         * SEMÂNTICA: Valida os dados da edição. A regra unique do e-mail tem um detalhe importante: 
+         * 'unique:users,email,' . $usuarios->id ignora o ID do próprio usuário, permitindo que ele salve
+         * sem alterar o e-mail, sem gerar erro de "e-mail já em uso". A senha agora é 'nullable' (opcional).
          */
-        $user->update($request->all());
-        $user->update($request->all());
+        $dados = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $usuarios->id],
+            'password' => ['nullable', 'string', 'min:8', 'confirmed'], 
+        ]);
+
+        // Atualiza as propriedades em memória
+        $usuarios->name = $dados['name'];
+        $usuarios->email = $dados['email'];
+
+        /*
+         * SINTAXE: if (!empty($variavel))
+         * SEMÂNTICA: Verifica se o campo senha foi preenchido. Se sim, criptografa a nova senha e atualiza. 
+         * Se deixado em branco, a senha antiga é mantida.
+         */
+        if (!empty($dados['password'])) {
+            $usuarios->password = Hash::make($dados['password']);
+        }
+
+        /*
+         * SINTAXE: $objeto->save()
+         * SEMÂNTICA: Dispara o "UPDATE" no banco de dados apenas com os campos que foram alterados em memória.
+         */
+        $usuarios->save();
         
         /*
-         * SINTAXE/SEMÂNTICA: Redireciona de volta para a lista.
+         * SINTAXE/SEMÂNTICA: Redireciona de volta para a lista com mensagem de sucesso.
          */
-        return redirect()->route('usuarios.index');
-
+        return redirect()->route('usuarios.index')->with('success', 'Usuário atualizado com sucesso!');
     }
 
     /*
@@ -151,9 +168,6 @@ class UsuarioController extends Controller
          */
         $usuarios->delete();
 
-        // 2. Apaga o registo
-
-        // 3. Redireciona de volta para a lista com uma mensagem de sucesso
         /*
          * SINTAXE/SEMÂNTICA: Redireciona para o index passando a confirmação de que a recepcionista foi removida.
          */
