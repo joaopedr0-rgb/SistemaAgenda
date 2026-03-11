@@ -9,16 +9,6 @@ use App\Http\Controllers\CadastroController;
 use App\Http\Controllers\AgendamentosController;
 use App\Http\Controllers\UsuarioController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
 
 
 Route::get('/', function () {
@@ -43,12 +33,8 @@ Route::middleware(['auth'])->group(function () {
 
 //Aqui estão as rotas protegidas por autenticação e autorização, ou seja, o usuário precisa estar logado e ser um administrador para acessar essas páginas.
 Route::middleware(['auth', 'admin'])->group(function () {
-
-    
     Route::resource('profissionais', ProfissionaisController::class)->parameters(['profissionais' => 'profissional']);
     Route::resource('usuarios', UsuarioController::class)->parameters(['usuarios' => 'usuarios']);
-
-
 });
 
 
