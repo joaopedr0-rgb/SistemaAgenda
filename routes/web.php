@@ -19,6 +19,12 @@ use App\Http\Controllers\UsuarioController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+
+Route::get('/', function () {
+    return redirect()->route('cadastro');
+});
+
 //Aqui Bernardo, é toda a parte de login e cadastro, essas rota estão fora do middleware de autenticação porque o usuário precisa acessar elas sem estar logado.
 Route::get('/cadastro', [CadastroController::class, 'create'])->name('cadastro');
 Route::post('/cadastro', [CadastroController::class, 'store']);
@@ -32,9 +38,6 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('clientes', ClientesController::class)->parameters(['clientes' => 'cliente']);
     Route::resource('servicos', ServicosController::class)->parameters(['servicos' => 'servico']);
     Route::resource('agendamentos', AgendamentosController::class)->parameters(['agendamentos' => 'agendamento']);
-    Route::get('/', function () {
-    return redirect()->route('profissionais.index');
-});
 });
 
 
