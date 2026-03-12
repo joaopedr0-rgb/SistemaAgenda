@@ -26,6 +26,17 @@
                                 @enderror
                             </div>
 
+                            {{-- Campo: Descrição (ADICIONADO) --}}
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label fw-bold">Descrição do Serviço</label>
+                                <textarea name="descricao" rows="3"
+                                    class="form-control @error('descricao') is-invalid @enderror"
+                                    required>{{ old('descricao', $servico->descricao) }}</textarea>
+                                @error('descricao')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
                             {{-- Campo: Preço --}}
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold">Preço do Serviço</label>
@@ -52,6 +63,18 @@
                                 </div>
                                 @error('duracao') 
                                     <div class="invalid-feedback d-block">{{ $message }}</div> 
+                                @enderror
+                            </div>
+                            
+                            {{-- Campo: Status (ADICIONADO) --}}
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label fw-bold">Status do Serviço</label>
+                                <select name="status" class="form-control @error('status') is-invalid @enderror" required>
+                                    <option value="Ativo" {{ old('status', $servico->status) == 'Ativo' ? 'selected' : '' }}>Ativo</option>
+                                    <option value="Inativo" {{ old('status', $servico->status) == 'Inativo' ? 'selected' : '' }}>Inativo</option>
+                                </select>
+                                @error('status')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
                                 @enderror
                             </div>
                         </div>

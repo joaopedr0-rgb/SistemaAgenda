@@ -11,14 +11,14 @@
                 {{-- 
                     SINTAXE: action="{{ route('clientes.store') }}" 
                     SEMÂNTICA: Aponta para o método 'store' do Controller. 
-                    O formulário envia os dados via POST, que é o padrão para criação de recursos.
+                    O formulário envia os dados via POST, que é o padrão para criação de recursos no padrão REST.
                 --}}
                 <form action="{{ route('clientes.store') }}" method="POST">
                     
                     {{-- 
                         SINTAXE: @csrf 
-                        SEMÂNTICA: Obrigatório! Cria um campo oculto com um token de segurança. 
-                        Sem isso, o Laravel retorna erro "419 Page Expired" por proteção contra ataques.
+                        SEMÂNTICA: Cross-Site Request Forgery. Obrigatório! Cria um token de segurança único para a sessão. 
+                        O Laravel usa isso para garantir que foi VOCÊ (do seu site) que enviou o formulário, e não um site hacker.
                     --}}
                     @csrf
                     
@@ -27,18 +27,18 @@
                             <label class="form-label fw-bold">Nome Completo</label>
                             {{-- 
                                 SINTAXE: @error('nome') is-invalid @enderror 
-                                SEMÂNTICA: Se a validação no Controller falhar para o campo 'nome', 
-                                o Laravel adiciona a classe CSS do Bootstrap que deixa a borda vermelha.
+                                SEMÂNTICA: Validação Visual. Se o Controller encontrar um erro no campo 'nome', 
+                                ele "pinga" de volta para a View e o Blade injeta a classe 'is-invalid' do Bootstrap.
 
                                 SINTAXE: value="{{ old('nome') }}"
-                                SEMÂNTICA: Função de persistência. Se o formulário der erro em outro campo, 
-                                o que o usuário já digitou aqui não é apagado (melhora a experiência do usuário).
+                                SEMÂNTICA: Persistência de Dados (UX). Se o e-mail estiver errado, o usuário não 
+                                perde o nome que já digitou. O Laravel "lembra" do valor da tentativa anterior.
                             --}}
                             <input type="text" name="nome" class="form-control @error('nome') is-invalid @enderror" value="{{ old('nome') }}" required>
                             
                             {{-- 
                                 SINTAXE: @error('nome') ... @enderror
-                                SEMÂNTICA: Exibe a mensagem de erro específica vinda do Controller (ex: "O campo nome é obrigatório").
+                                SEMÂNTICA: Exibe a mensagem de erro amigável definida no Controller ou no arquivo de tradução do Laravel.
                             --}}
                             @error('nome') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
@@ -51,13 +51,21 @@
 
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-bold">Telefone</label>
-                            {{-- Aqui não há @error, pois no seu Controller o telefone é 'nullable' (opcional) --}}
+                            {{-- 
+                                SINTAXE: input type="text" 
+                                SEMÂNTICA: Como no seu Controller o telefone provavelmente é 'nullable' (opcional), 
+                                não há diretiva de erro aqui, permitindo que o usuário deixe em branco se desejar.
+                            --}}
                             <input type="text" name="telefone" class="form-control" value="{{ old('telefone') }}" placeholder="(00) 00000-0000">
                         </div>
                     </div>
 
                     <div class="d-flex justify-content-end gap-2 mt-4">
-                        {{-- Botão de cancelar apenas redireciona para a lista sem salvar nada --}}
+                        {{-- 
+                            SINTAXE: a href="{{ route('clientes.index') }}"
+                            SEMÂNTICA: Link de escape. Redireciona o usuário de volta para a lista, 
+                            cancelando a operação de cadastro sem processar nada no servidor.
+                        --}}
                         <a href="{{ route('clientes.index') }}" class="btn btn-light border">Cancelar</a>
                         <button type="submit" class="btn btn-primary px-4">Salvar Cadastro</button>
                     </div>

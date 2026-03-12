@@ -1,17 +1,34 @@
 <?php
+/*
+SINTAXE: <?php
+SEMÂNTICA: Abertura padrão de arquivo PHP. Informa ao servidor que o código a seguir deve ser interpretado como PHP.
+*/
 
+/*
+SINTAXE: namespace Caminho\Do\Diretorio;
+SEMÂNTICA: Define o endereço lógico desta classe dentro do projeto Laravel, permitindo que ela seja encontrada automaticamente (autoload) sem precisarmos dar 'include' manualmente.
+*/
 namespace App\Http\Controllers;
 
+/*
+SINTAXE: use Caminho\Da\Classe;
+SEMÂNTICA: Importa as classes necessárias para este arquivo. 'User' para acessar o banco de dados, 'Request' para capturar os dados do formulário e 'Hash' para criptografar as senhas.
+*/
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
+/*
+SINTAXE: class NomeDaClasse extends ClassePai
+SEMÂNTICA: Declara o Controller que vai gerenciar o cadastro, herdando os métodos base e recursos do Controller padrão do Laravel.
+*/
 class CadastroController extends Controller
 {
-    /**
-     * Show the form for creating a new resource.
-     * Semântica: Exibe a tela de cadastro para o usuário.
-     */
+
+    /*
+    SINTAXE: public function nomeDoMetodo()
+    SEMÂNTICA: Método acessado via GET. Sua única responsabilidade é renderizar e entregar a tela (o formulário HTML) para que o usuário possa se cadastrar.
+    */
     public function create()
     {
         // Sintaxe: retorna uma função auxiliar view().
@@ -19,9 +36,10 @@ class CadastroController extends Controller
         return view('cadastro.index');
     }
 
-    /**
-     * Store a newly created resource in storage.
+    /*
+     *
      * Semântica: Recebe os dados do formulário e salva no banco de dados.
+     *
      */
     public function store(Request $request)
     {
@@ -55,35 +73,30 @@ class CadastroController extends Controller
         return redirect()->route('clientes.index');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(User $user)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
+   /*
+    SINTAXE: Recebe o Model 'User' via parâmetro (Route Model Binding).
+    SEMÂNTICA: Método planejado para carregar a tela de edição de um usuário específico. Atualmente vazio.
+    */
     public function edit(User $user)
     {
-        //
+            
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+   /*
+    SINTAXE: Recebe a requisição (Request) com os dados novos e o usuário alvo (User).
+    SEMÂNTICA: Método planejado para processar e salvar as edições feitas no formulário. Atualmente vazio.
+    */
     public function update(Request $request, User $user)
     {
-        //
+        
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    /*
+    SINTAXE: Recebe o usuário alvo (User) que será deletado.
+    SEMÂNTICA: Método planejado para excluir o registro selecionado do banco de dados. Atualmente vazio.
+    */
     public function destroy(User $user)
     {
-        //
+       
     }
 }

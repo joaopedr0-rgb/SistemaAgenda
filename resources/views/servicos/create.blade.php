@@ -17,8 +17,7 @@ do arquivo base (app.blade.php), mantendo o cabeçalho e rodapé padrão.
 
                 <div class="card-body p-4">
                     {{--
-                    SINTAXE: <
-                    form action="{{ route('...') }}" method="POST">
+                    SINTAXE: <form action="{{ route('...') }}" method="POST">
                     SEMÂNTICA: Define o destino dos dados. O método POST é obrigatório para
                     segurança em operações de escrita (criação) no banco de dados.
                     --}}
@@ -43,10 +42,22 @@ do arquivo base (app.blade.php), mantendo o cabeçalho e rodapé padrão.
                                 --}}
                                 <input type="text" name="nome"
                                     class="form-control @error('nome') is-invalid @enderror"
-                                    value="{{ old('nome') }}" required placeholder="Ex: ...">
+                                    value="{{ old('nome') }}" required placeholder="Ex: Corte de Cabelo">
 
                                 {{-- Exibe a mensagem de erro vinda do Controller --}}
                                 @error('nome')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            {{-- Campo: Descrição (ADICIONADO AQUI) --}}
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label fw-bold">Descrição do Serviço</label>
+                                <textarea name="descricao" rows="3"
+                                    class="form-control @error('descricao') is-invalid @enderror"
+                                    required placeholder="Ex: Corte de cabelo masculino completo com lavagem...">{{ old('descricao') }}</textarea>
+                                
+                                @error('descricao')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -58,7 +69,7 @@ do arquivo base (app.blade.php), mantendo o cabeçalho e rodapé padrão.
                                     <span class="input-group-text">R$</span>
                                     <input type="number" name="preco" step="0.01" min="0"
                                         class="form-control @error('preco') is-invalid @enderror"
-                                        value="{{ old('preco') }}" required placeholder="0,00">
+                                        value="{{ old('preco') }}" required placeholder="0.00">
                                 </div>
                                 @error('preco')
                                     <div class="invalid-feedback d-block">{{ $message }}</div>
@@ -78,21 +89,23 @@ do arquivo base (app.blade.php), mantendo o cabeçalho e rodapé padrão.
                                     <div class="invalid-feedback d-block">{{ $message }}</div>
                                 @enderror
                             </div>
-                                    <div class="col-md-12 mb-3">
-                                        <label class="form-label fw-bold">Status do Serviço</label>
-                                        <select name="status" class="form-control @error('status') is-invalid @enderror"
-                                            required>
-                                            <option value="">Selecione um status...</option>
-                                            <option value="Ativo" {{ old('status') == 'Ativo' ? 'selected' : '' }}>Ativo
-                                            </option>
-                                            <option value="Inativo" {{ old('status') == 'Inativo' ? 'selected' : '' }}>Inativo
-                                            </option>
-                                        </select>
+                            
+                            {{-- Campo: Status --}}
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label fw-bold">Status do Serviço</label>
+                                <select name="status" class="form-control @error('status') is-invalid @enderror"
+                                    required>
+                                    <option value="">Selecione um status...</option>
+                                    <option value="Ativo" {{ old('status') == 'Ativo' ? 'selected' : '' }}>Ativo
+                                    </option>
+                                    <option value="Inativo" {{ old('status') == 'Inativo' ? 'selected' : '' }}>Inativo
+                                    </option>
+                                </select>
 
-                                        @error('status')
-                                            <div class="invalid-feedback d-block">{{ $message }}</div>
-                                        @enderror
-                                    </div>
+                                @error('status')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                            </div>
 
                             <div class="d-flex justify-content-end gap-2 mt-3">
                                 {{-- Botão Voltar: Apenas um link estilizado --}}
