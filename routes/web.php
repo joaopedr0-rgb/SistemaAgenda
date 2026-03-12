@@ -14,7 +14,6 @@ use App\Http\Controllers\CadastroController;
 use App\Http\Controllers\AgendamentosController;
 use App\Http\Controllers\UsuarioController;
 
-<<<<<<< HEAD
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -27,24 +26,16 @@ use App\Http\Controllers\UsuarioController;
  * SEMÂNTICA: Bernardo, o uso do 'redirect()->route()' aqui é uma excelente prática. 
  * Caso você mude a URL do cadastro no futuro, esse redirecionamento inteligente não vai quebrar.
  */
-=======
-
-
->>>>>>> b7f3cb54d2b4b15fb35f5ce1d9e2dedbba50c467
 Route::get('/', function () {
     return redirect()->route('cadastro');
 });
 
-<<<<<<< HEAD
 // Aqui, Bernardo, é toda a parte de login e cadastro. Estas rotas estão fora do middleware de autenticação porque o usuário precisa acessar elas sem estar logado.
 /*
  * SINTAXE: Route::get(...) / Route::post(...)
  * SEMÂNTICA: Você definiu as portas de entrada públicas do seu sistema perfeitamente. 
  * O GET exibe o formulário para o usuário, e o POST processa os dados de forma invisível e segura.
  */
-=======
-//Aqui Bernardo, é toda a parte de login e cadastro, essas rota estão fora do middleware de autenticação porque o usuário precisa acessar elas sem estar logado.
->>>>>>> b7f3cb54d2b4b15fb35f5ce1d9e2dedbba50c467
 Route::get('/cadastro', [CadastroController::class, 'create'])->name('cadastro');
 Route::post('/cadastro', [CadastroController::class, 'store']);
 
@@ -70,7 +61,6 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('clientes', ClientesController::class)->parameters(['clientes' => 'cliente']);
     Route::resource('servicos', ServicosController::class)->parameters(['servicos' => 'servico']);
     Route::resource('agendamentos', AgendamentosController::class)->parameters(['agendamentos' => 'agendamento']);
-<<<<<<< HEAD
     
 });
 
@@ -86,16 +76,3 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('profissionais', ProfissionaisController::class)->parameters(['profissionais' => 'profissional']);
     Route::resource('usuarios', UsuarioController::class)->parameters(['usuarios' => 'usuarios']);
 });
-=======
-});
-
-
-//Aqui estão as rotas protegidas por autenticação e autorização, ou seja, o usuário precisa estar logado e ser um administrador para acessar essas páginas.
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::resource('profissionais', ProfissionaisController::class)->parameters(['profissionais' => 'profissional']);
-    Route::resource('usuarios', UsuarioController::class)->parameters(['usuarios' => 'usuarios']);
-});
-
-
-
->>>>>>> b7f3cb54d2b4b15fb35f5ce1d9e2dedbba50c467
