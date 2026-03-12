@@ -2,7 +2,7 @@
 /*
 SINTAXE: A tag <?php indica ao servidor web que o código a seguir deve ser interpretado como PHP.
 SEMÂNTICA: Abertura padrão de arquivo PHP. Como o arquivo só contém PHP, a tag de fechamento (?>) é omitida intencionalmente para evitar espaços em branco acidentais na saída.
-*/
+route
 
 /*
 SINTAXE: 'namespace' é usado para agrupar classes e evitar conflitos de nomes.
@@ -19,6 +19,7 @@ além de manipular o próprio model Agendamento.
 use App\Models\Agendamento;
 use App\Models\Cliente;
 use App\Models\Profissional;
+use App\Models\Servico;
 
 /*
 SINTAXE: Importa a classe Request do componente HTTP do framework (Illuminte).
@@ -47,6 +48,7 @@ class AgendamentosController extends Controller
         $agendamentos = Agendamento::all();
         $clientes = Cliente::all();
         $profissionais = Profissional::all();
+        $servicos = Servico::all();
 
         /*
         SINTAXE: return devolve um resultado da função. view() é uma função global (helper).
@@ -74,6 +76,7 @@ class AgendamentosController extends Controller
         */
         $clientes = Cliente::all();
         $profissionais = Profissional::all();
+        $servicos = Servico::all();
 
         /*
         SINTAXE: Helper view() com função compact().
@@ -110,6 +113,8 @@ class AgendamentosController extends Controller
             */
             'profissional_id' => 'required|exists:profissionais,id', 
             
+            'servico_id'      => 'required|exists:servicos,id',
+
             /*
             SINTAXE/SEMÂNTICA: 'date' verifica se o formato é uma data válida para o PHP/Banco.
             */
@@ -173,6 +178,7 @@ class AgendamentosController extends Controller
         $validated = $request->validate([
             'cliente_id'      => 'required|exists:clientes,id',
             'profissional_id' => 'required|exists:profissionais,id', /* ERRO CORRIGIDO para 'profissionais' mantido */
+            'servico_id'      => 'required|exists:servicos,id',
             'data'            => 'required|date',
             'hora'            => 'required|date_format:H:i',
         ]);
