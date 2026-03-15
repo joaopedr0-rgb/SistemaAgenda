@@ -44,7 +44,13 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'is_admin', // Adicione o campo is_admin à lista de atributos preenchíveis
+        'is_admin',
+        'cep',// Adicione o campo is_admin à lista de atributos preenchíveis
+        'bairro',
+        'cidade',
+        'estado',
+        'logradouro',
+        'numero'
     ];
 
     /**
