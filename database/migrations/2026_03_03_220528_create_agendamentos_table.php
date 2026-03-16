@@ -44,6 +44,12 @@ return new class extends Migration
              * do Cliente 5 somem automaticamente. Isso evita "dados órfãos" no banco.
              */
             $table ->foreignId('cliente_id')->constrained('clientes')->cascadeOnDelete();
+            $table ->foreignId('servico_id')->constrained('servicos')->cascadeOnDelete();
+
+             /*
+             * SINTAXE: $table->foreignId('profissional_id')...
+             * SEMÂNTICA: Exatamente a mesma lógica acima, mas vinculando o agendamento a um Profissional.
+             */
 
             /*
              * SINTAXE: $table->foreignId('profissional_id')...

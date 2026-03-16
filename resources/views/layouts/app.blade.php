@@ -96,6 +96,7 @@
                                 href="{{ route('agendamentos.index') }}">Agendamentos</a></li>
                         <li class="nav-item"><a class="nav-link active" href="{{ route('usuarios.index') }}">Usuarios</a>
                         </li>
+                        <li class="nav-item"><a class="nav-link active" href="{{ route('dashboard.index') }}">Dashboard</a></li>
                         <li class="nav-item ms-lg-3">
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf

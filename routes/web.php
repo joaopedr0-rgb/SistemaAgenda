@@ -13,6 +13,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\CadastroController;
 use App\Http\Controllers\AgendamentosController;
 use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +30,7 @@ use App\Http\Controllers\UsuarioController;
 Route::get('/', function () {
     return redirect()->route('login');
 });
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
 // Aqui, Bernardo, é toda a parte de login e cadastro. Estas rotas estão fora do middleware de autenticação porque o usuário precisa acessar elas sem estar logado.
 /*

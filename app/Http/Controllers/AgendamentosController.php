@@ -59,7 +59,7 @@ class AgendamentosController extends Controller
         e as empacota em um array associativo ['agendamentos' => $agendamentos, ...] 
         para injetá-las na View, permitindo que o HTML as utilize.
         */
-        return view('agendamentos.index', compact('agendamentos', 'clientes', 'profissionais'));
+        return view('agendamentos.index', compact('agendamentos', 'clientes', 'profissionais', 'servicos'));
     }
 
     /*
@@ -82,7 +82,7 @@ class AgendamentosController extends Controller
         SINTAXE: Helper view() com função compact().
         SEMÂNTICA: Retorna a view resources/views/agendamentos/create.blade.php passando os dados para montar os selects.
         */
-        return view('agendamentos.create', compact('clientes', 'profissionais'));
+        return view('agendamentos.create', compact('clientes', 'profissionais', 'servicos'));
     }
 
     /*
@@ -162,7 +162,7 @@ class AgendamentosController extends Controller
         /*
         SINTAXE/SEMÂNTICA: Envia 3 variáveis para a view: o registro atual ($agendamento) e as listas preenchidas.
         */
-        return view('agendamentos.edit', compact('agendamento', 'clientes', 'profissionais'));
+        return view('agendamentos.edit', compact('agendamento', 'clientes', 'profissionais', 'servicos'));
     }
 
     /*

@@ -80,6 +80,21 @@
                           @enderror
                       </div>
 
+                      <div class="col-md-12 mb-3">
+                          <label for="servico_id" class="form-label fw-bold">Serviço</label>
+                          <select name="servico_id" id="servico_id" class="form-select @error('servico_id') is-invalid @enderror" required>
+                              <option value="">Selecione o Serviço</option>
+                              @foreach($servicos as $servico)
+                                  <option value="{{ $servico->id }}" {{ old('servico_id') == $servico->id ? 'selected' : '' }}>
+                                      {{ $servico->nome }}
+                                  </option>
+                              @endforeach
+                          </select>
+                          @error('servico_id')
+                              <div class="invalid-feedback">{{ $message }}</div>
+                          @enderror
+                      </div>
+
                       <div class="col-md-6 mb-3">
                           <label for="data" class="form-label fw-bold">Data</label>
                           {{-- SINTAXE: value="{{ old('data') }}" --}}
