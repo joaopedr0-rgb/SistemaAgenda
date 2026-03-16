@@ -42,12 +42,35 @@
                     <label for="email" class="form-label fw-bold text-secondary">E-mail</label>
                     <input type="email" class="form-control" name="email" id="email" value="{{ old('email') }}" required>
                 </div>
-
                 <div class="mb-4">
+                    <label for="cep" class="form-label fw-bold text-secondary">CEP</label>
+                    <input type="text" class="form-control" name="cep" id="cep" value="{{ old('cep') }}" required>
+                </div>
+                <div class="mb-4">
+                    <label for="bairro" class="form-label fw-bold text-secondary">Bairro</label>
+                    <input type="text" class="form-control" name="bairro" id="bairro" value="{{ old('bairro') }}" required>
+                </div>
+                <div class="mb-4">
+                    <label for="cidade" class="form-label fw-bold text-secondary">Cidade</label>
+                    <input type="text" class="form-control" name="cidade" id="cidade" value="{{ old('cidade') }}" required>
+                </div>
+                <div class="mb-4">
+                    <label for="estado" class="form-label fw-bold text-secondary">Estado</label>
+                    <input type="text" class="form-control" name="estado" id="estado" value="{{ old('estado') }}" required>
+                </div>
+                <div class="mb-4">
+                    <label for="numero" class="form-label fw-bold text-secondary">Número</label>
+                    <input type="text" class="form-control" name="numero" id="numero" value="{{ old('numero') }}" required>
+                </div>
+                <div class="mb-4">
+                    <label for="logradouro" class="form-label fw-bold text-secondary">Logradouro</label>
+                    <input type="text" class="form-control" name="logradouro" id="logradouro" value="{{ old('logradouro') }}" required>
+                </div>
+                 <div class="mb-4">
                     <label for="password" class="form-label fw-bold text-secondary">Senha</label>
                     <input type="password" class="form-control" name="password" id="password" required>
                 </div>
-                
+
                 <div class="mb-4">
                     <label for="password_confirmation" class="form-label fw-bold text-secondary">Confirmar Senha</label>
                     {{-- 

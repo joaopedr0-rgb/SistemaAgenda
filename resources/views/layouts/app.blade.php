@@ -37,41 +37,83 @@
     </style>
 </head>
 
+
 <body class="bg-light">
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const cepField = document.getElementById('cep');
+
+            if (cepField) { // Verifica se o campo existe na página atual
+                cepField.addEventListener('blur', function () {
+                    let cep = this.value.replace(/\D/g, '');
+
+                    if (cep.length === 8) {
+                        // Semântica: Faz a requisição para a API externa
+                        fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                            .then(res => res.json())
+                            .then(dados => {
+                                if (!dados.erro) {
+                                    // Sintaxe: Preenche os IDs que conferimos no seu código
+                                    document.getElementById('bairro').value = dados.bairro;
+                                    document.getElementById('cidade').value = dados.localidade;
+                                    document.getElementById('estado').value = dados.uf;
+                                    // Adicione o campo de logradouro se você o criou
+                                    if (document.getElementById('logradouro')) {
+                                        document.getElementById('logradouro').value = dados.logradouro;
+                                    }
+                                }
+                            });
+                    }
+                });
+            }
+        });
+    </script>
+
     {{-- Barra de Navegação Superior --}}
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm mb-5">
-        <div class="container">
-            {{-- Link para a raiz do site --}}
-            <a class="navbar-brand" href="/">
-                Sistema de Agenda
-            </a>
+    @if (!Route::is('login') && !Route::is('cadastro'))
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm mb-5">
+            <div class="container">
+                {{-- Link para a raiz do site --}}
+                <a class="navbar-brand" href="/">
+                    Sistema de Agenda
+                </a>
 
-            {{-- Botão "Hambúrguer" para dispositivos móveis --}}
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+                {{-- Botão "Hambúrguer" para dispositivos móveis --}}
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link active" href="{{ route('profissionais.index') }}">Profissionais</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="{{ route('clientes.index') }}">Clientes</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="{{ route('servicos.index') }}">Serviços</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="{{ route('agendamentos.index') }}">Agendamentos</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="{{ route('usuarios.index') }}">Usuarios</a></li>
-                    <li class="nav-item ms-lg-3">
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button type="submit" class="btn btn-light btn-sm">
-                                Sair
-                            </button>
-                        </form>
-                    </li>
-                </ul>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link active"
+                                href="{{ route('profissionais.index') }}">Profissionais</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="{{ route('clientes.index') }}">Clientes</a>
+                        </li>
+                        <li class="nav-item"><a class="nav-link active" href="{{ route('servicos.index') }}">Serviços</a>
+                        </li>
+                        <li class="nav-item"><a class="nav-link active"
+                                href="{{ route('agendamentos.index') }}">Agendamentos</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="{{ route('usuarios.index') }}">Usuarios</a>
+                        </li>
+                        <li class="nav-item ms-lg-3">
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit" class="btn btn-light btn-sm">
+                                    Sair
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
             </div>
+        </nav>
+    @endif
+    <main class="py-5 min-vh-100 d-flex flex-column justify-content-center">
+        <div class="container">
+            @yield('content')
         </div>
-    </nav>
-
+    </main>
     {{--
     ÁREA DE CONTEÚDO DINÂMICO
     SINTAXE: @yield('nome_da_secao')
@@ -79,9 +121,9 @@
     arquivo "filho" use @section('content') para injetar o HTML aqui dentro.
     É o que permite que a barra de navegação e o footer sejam os mesmos em todas as páginas.
     --}}
-    <main class="container main-content">
+    {{--<main class="container main-content">
         @yield('content')
-    </main>
+    </main>--}}
 
     {{-- Rodapé Estático --}}
     <footer class="bg-white border-top py-4 mt-5">

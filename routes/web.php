@@ -27,7 +27,7 @@ use App\Http\Controllers\UsuarioController;
  * Caso você mude a URL do cadastro no futuro, esse redirecionamento inteligente não vai quebrar.
  */
 Route::get('/', function () {
-    return redirect()->route('cadastro');
+    return redirect()->route('login');
 });
 
 // Aqui, Bernardo, é toda a parte de login e cadastro. Estas rotas estão fora do middleware de autenticação porque o usuário precisa acessar elas sem estar logado.
