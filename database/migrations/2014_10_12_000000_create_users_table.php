@@ -64,7 +64,8 @@ return new class extends Migration {
              * e 'updated_at' (data da última edição). O Laravel preenche elas sozinho!
              */
             $table->timestamps();
-            $table->string('cep', 8)->nullable();
+            // Campos adicionais para endereço, necessários para a API de CEP. Todos opcionais (nullable) para não quebrar os cadastros antigos.
+            $table->string('cep', 9)->nullable();
             $table->string('bairro')->nullable();
             $table->string('cidade')->nullable();
             $table->string('estado', 2)->nullable();

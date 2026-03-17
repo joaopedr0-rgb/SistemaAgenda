@@ -50,11 +50,13 @@ class CadastroController extends Controller
             'name' => ['required', 'string', 'max:255'], // Obrigatório, texto, limite de caracteres.
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'], // Deve ser e-mail único na tabela users.
             'password' => ['required', 'string', 'min:8', 'confirmed'], // Mínimo 8 caracteres; exige campo 'password_confirmation'.
+            // Campos de endereço, necessarios para funcionamento da API de CEP. Todos obrigatórios.
             'cep' => 'required|size:9',
             'logradouro' => 'required|string|max:255',
             'bairro' => 'required|string|max:100',
             'cidade' => 'required|string|max:100',
             'estado' => 'required|size:2',
+            'numero' => 'required|string|max:10',
         ]);
 
         // --- ETAPA 2: CRIAÇÃO ---

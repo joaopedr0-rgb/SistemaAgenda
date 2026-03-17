@@ -14,112 +14,73 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     {{-- Importação de fonte moderna via Google Fonts --}}
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
     <style>
-        /* Variáveis Globais de Cor */
-        :root {
-            --bs-primary: #4f46e5; /* Azul indigo moderno */
-            --bs-body-bg: #f8fafc; /* Fundo cinza super suave */
-        }
-
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--bs-body-bg);
             display: flex;
             flex-direction: column;
-            min-height: 100vh; /* Mantém o rodapé no fundo mesmo com pouco conteúdo */
+            min-height: 100vh;
+            /* Mantém o rodapé no fundo mesmo com pouco conteúdo */
         }
 
         .main-content {
-            flex: 1; /* Faz esta área esticar para preencher o espaço vazio */
+            flex: 1;
         }
 
-        /* Customização da Navbar */
-        .navbar {
-            background-color: var(--bs-primary) !important;
-            padding: 0.8rem 0;
-        }
-
+        /* Faz esta área "esticar" para preencher o espaço vazio */
         .navbar-brand {
-            font-weight: 700;
-            letter-spacing: -0.5px;
-        }
-
-        .nav-link {
-            font-weight: 500;
-        }
-
-        /* Estilos Globais para os "Filhos" (Cards, Tabelas, Inputs) */
-        .card {
-            border: none;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-            transition: all 0.2s ease-in-out;
-        }
-
-        .card:hover {
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            transform: translateY(-2px);
-        }
-
-        .table-container {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        .table thead th {
-            background-color: #f8fafc;
-            text-transform: uppercase;
-            font-size: 0.75rem;
-            letter-spacing: 0.05em;
-            color: #64748b;
-            border-top: none;
-        }
-
-        .badge {
-            padding: 0.5em 1em;
             font-weight: 600;
-            border-radius: 30px;
-        }
-
-        .form-control, .form-select {
-            border-color: #e2e8f0;
-            padding: 0.6rem 0.8rem;
-            border-radius: 8px;
-        }
-
-        .form-control:focus, .form-select:focus {
-            border-color: var(--bs-primary);
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+            letter-spacing: -0.5px;
         }
     </style>
 </head>
 
+
 <body class="bg-light">
 
-    {{-- Script de Autocompletar CEP --}}
     <script>
+        /*SINTAXE: document.addEventListener('DOMContentLoaded', ...)
+   SEMÂNTICA: Garante que o script só rode quando todo o HTML da página for carregado,
+   evitando erros ao tentar buscar campos que ainda não existem no navegador.
+*/
         document.addEventListener('DOMContentLoaded', function () {
             const cepField = document.getElementById('cep');
-
+            /* SINTAXE: document.getElementById('cep')
+                   SEMÂNTICA: Cria uma "ponte" entre o JavaScript e o seu campo de input do CEP. 
+                   Ele procura no seu formulário o elemento que possui id="cep".
+                */
             if (cepField) { // Verifica se o campo existe na página atual
+                /* SINTAXE: if (cepField) { ... }
+                SEMÂNTICA: Verifica se o campo existe na página atual. Isso evita que o código 
+                 tente rodar na tela de Login, onde o campo CEP não existe.
+                */
                 cepField.addEventListener('blur', function () {
                     let cep = this.value.replace(/\D/g, '');
+                    /* SINTAXE: .replace(/\D/g, '')
+                            SEMÂNTICA: Limpa o que foi digitado, removendo traços e pontos. 
+                            Garante que fiquem apenas os 8 números exigidos pela API ViaCEP.
+                         */
 
                     if (cep.length === 8) {
-                        // Semântica: Faz a requisição para a API externa
+                        /* SINTAXE: if (cep.length === 8) { ... }
+                   SEMÂNTICA: Só faz a requisição se o CEP estiver completo. 
+                   Evita disparar chamadas desnecessárias para a internet com CEPs incompletos.
+                */
+
                         fetch(`https://viacep.com.br/ws/${cep}/json/`)
                             .then(res => res.json())
                             .then(dados => {
                                 if (!dados.erro) {
-                                    // Sintaxe: Preenche os IDs
-                                    if(document.getElementById('bairro')) document.getElementById('bairro').value = dados.bairro;
-                                    if(document.getElementById('cidade')) document.getElementById('cidade').value = dados.localidade;
-                                    if(document.getElementById('estado')) document.getElementById('estado').value = dados.uf;
-                                    if(document.getElementById('logradouro')) document.getElementById('logradouro').value = dados.logradouro;
+                                    // Sintaxe: Preenche os IDs que conferimos no seu código
+                                    document.getElementById('bairro').value = dados.bairro;
+                                    document.getElementById('cidade').value = dados.localidade;
+                                    document.getElementById('estado').value = dados.uf;
+                                    // Adicione o campo de logradouro se você o criou
+                                    if (document.getElementById('logradouro')) {
+                                        document.getElementById('logradouro').value = dados.logradouro;
+                                    }
                                 }
                             });
                     }
@@ -130,7 +91,7 @@
 
     {{-- Barra de Navegação Superior --}}
     @if (!Route::is('login') && !Route::is('cadastro'))
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm mb-4">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm mb-5">
             <div class="container">
                 {{-- Link para a raiz do site --}}
                 <a class="navbar-brand" href="/">
@@ -154,11 +115,10 @@
                                 href="{{ route('agendamentos.index') }}">Agendamentos</a></li>
                         <li class="nav-item"><a class="nav-link active" href="{{ route('usuarios.index') }}">Usuarios</a>
                         </li>
-                        <li class="nav-item"><a class="nav-link active" href="{{ route('dashboard.index') }}">Dashboard</a></li>
                         <li class="nav-item ms-lg-3">
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
-                                <button type="submit" class="btn btn-light btn-sm fw-bold px-3 py-2 rounded-3">
+                                <button type="submit" class="btn btn-light btn-sm">
                                     Sair
                                 </button>
                             </form>
@@ -168,32 +128,37 @@
             </div>
         </nav>
     @endif
-
-    {{-- 
-    ÁREA DE CONTEÚDO DINÂMICO
-    Corrigido para não usar min-vh-100 junto com justify-content-center, 
-    o que quebrava o layout caso a tabela ficasse muito grande.
-    --}}
-    <main class="main-content py-4">
+    <main class="py-5 min-vh-100 d-flex flex-column justify-content-center">
         <div class="container">
             @yield('content')
         </div>
     </main>
+    {{--
+    ÁREA DE CONTEÚDO DINÂMICO
+    SINTAXE: @yield('nome_da_secao')
+    SEMÂNTICA: Este é um "espaço reservado". O Laravel ficará esperando que um
+    arquivo "filho" use @section('content') para injetar o HTML aqui dentro.
+    É o que permite que a barra de navegação e o footer sejam os mesmos em todas as páginas.
+    --}}
+    {{--<main class="container main-content">
+        @yield('content')
+    </main>--}}
 
     {{-- Rodapé Estático --}}
-    <footer class="bg-white border-top py-4 mt-auto">
+    <footer class="bg-white border-top py-4 mt-5">
         <div class="container text-center text-muted">
-            <small>&copy; {{ date('Y') }} Sistema de Agenda - Todos os direitos reservados.</small>
+            <small>&copy; 2026 Sistema de Agenda - Todos os direitos reservados.</small>
         </div>
     </footer>
 
     {{--
     SCRIPTS JS
-    SINTAXE: <script src="...">
-    SEMÂNTICA: Carrega a lógica do Bootstrap (como o funcionamento do menu mobile). 
-    Fica no final para não travar o carregamento visual da página (Performance).
+    SINTAXE:
+    <script src="...">
+        SEMÂNTICA: Carrega a lógica do Bootstrap(como o funcionamento do menu mobile). 
+        Fica no final para não travar o carregamento visual da página(Performance).
     --}}
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
