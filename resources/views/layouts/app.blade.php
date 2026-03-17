@@ -17,34 +17,121 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
     <style>
-        /* Animação de entrada da Navbar */
-        <style>
+        /* =========================================================
+       1. DEFINIÇÃO DAS VARIÁVEIS DE COR (O SEGREDO DO TEMA)
+       ========================================================= */
+        :root {
+            /* Fundo Dinâmico (Body e Navbar) */
+            --bg-gradient: linear-gradient(-45deg, #3A0256, #d81b60, #6a1b9a, #ad1457);
 
-        /* Animação de entrada suave */
-        @keyframes fadeInNavbar {
-            from {
-                transform: translateY(-20px);
-                opacity: 0;
+            /* Títulos e Labels */
+            --text-primary: #3A0256;
+
+            /* BOTÃO EDITAR: Branco com contorno roxo (padrão) */
+            --btn-edit-bg: #ffffff;
+            --btn-edit-text: #3A0256;
+            --btn-edit-border: #3A0256;
+
+            /* BOTÃO EXCLUIR: Padrão perigoso (vermelho) */
+            --btn-delete-bg: #dc3545;
+            --btn-delete-text: #ffffff;
+        }
+
+        [data-theme="summer"] {
+            /* Fundo Dinâmico (Verão - Azul/Verde) */
+            --bg-gradient: linear-gradient(-45deg, #334086, #3770c5, #335c92, #28b485);
+
+            /* Títulos e Labels (Azul Escuro) */
+            --text-primary: #005f73;
+
+            /* BOTÃO EDITAR: Agora fica verde/azul para combinar */
+            --btn-edit-bg: #ffffff;
+            --btn-edit-text: #28b485;
+            --btn-edit-border: #28b485;
+
+            /* BOTÃO EXCLUIR: Mantemos o vermelho por segurança */
+            --btn-delete-bg: #dc3545;
+            --btn-delete-text: #ffffff;
+        }
+
+        /* Animação do Gradiente */
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 0% 50%;
             }
 
-            to {
-                transform: translateY(0);
-                opacity: 1;
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
             }
         }
 
-        /* Navbar com degradê Roxo -> Rosa */
-        .navbar-brand-custom {
-            font-family: 'Poppins', sans-serif;
-            /* Se não tiver essa fonte, ele usará a padrão, mas recomendo */
-            font-weight: 900 !important;
-            font-size: 1.7rem !important;
-            letter-spacing: -1px !important;
-            text-transform: uppercase;
-            display: flex;
-            align-items: center;
+
+        /* =========================================================
+       2. APLICAÇÃO DOS ESTILOS DINÂMICOS (UNIFICADO)
+       ========================================================= */
+      
+
+        body {
+            background: var(--bg-gradient) !important;
+            background-size: 400% 400% !important;
+            animation: gradientAnimation 15s ease infinite !important;
+            background-attachment: fixed !important;
+            min-height: 100vh;
+            transition: background 0.5s ease;
+        }
+
+        .navbar-custom {
+            background: var(--bg-gradient) !important;
+            background-size: 400% 400% !important;
+            animation: gradientAnimation 10s ease infinite !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            border: none !important;
+            transition: background 0.5s ease;
+        }
+
+        /* Títulos e Labels dinâmicos */
+        .form-label,
+        .fw-bold,
+        h4,
+        h5,
+        .card-header-title {
+            color: var(--text-primary) !important;
+            transition: color 0.5s ease;
+        }
+
+
+        /* =========================================================
+       3. BOTÕES DE AÇÃO NA TABELA (DINÂMICOS)
+       ========================================================= */
+
+        /* Botão Editar: Puxa as variáveis '--btn-edit' */
+        .btn-edit-custom {
+            background: var(--bg-gradient) !important;
+            background-size: 400% 400% !important;
+            animation: gradientAnimation 10s ease infinite !important;
+            border: none !important;
+            color: white !important;
+            font-weight: 600 !important;
             transition: all 0.3s ease;
         }
+
+        /* Efeito de destaque ao passar o mouse */
+        .btn-update-custom:hover,
+        .btn-edit-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            color: white !important;
+        }
+
+        /* Manter o Excluir Vermelho para segurança (Opcional: pode colocar degradê tmb) */
+
+        /* =========================================================
+       4. ESTILOS DE BRANDING E LINKS (MANTIDOS)
+       ========================================================= */
 
         .brand-first-word {
             color: #ffffff;
@@ -53,33 +140,25 @@
 
         .brand-second-word {
             background: #ffffff;
-            color: #3A0256;
-            /* Roxo escuro para contraste */
+            color: var(--text-primary);
+            /* Dinâmico */
             padding: 2px 8px;
             border-radius: 6px;
             margin-left: 5px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            transition: color 0.5s ease;
         }
 
-        .navbar-custom {
-            background: linear-gradient(135deg, #3A0256 0%, #d81b60 100%) !important;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            animation: fadeInNavbar 0.6s ease-out;
-            border: none !important;
-        }
-
-        /* Estilo do Nome do Sistema */
         .navbar-brand {
             font-weight: 800 !important;
             letter-spacing: 1px;
         }
 
-        /* Estilo dos Links */
         .nav-link {
             font-weight: 600 !important;
             transition: all 0.3s ease !important;
             border-radius: 8px;
-            margin: 0 2px;
+            color: rgba(255, 255, 255, 0.8) !important;
         }
 
         .nav-link:hover {
@@ -87,19 +166,12 @@
             color: #fff !important;
         }
 
-        /* Estilo do Botão Sair (Light que você já usa, mas ajustado) */
         .btn-sair-custom {
             font-weight: bold !important;
             border-radius: 8px !important;
-            padding: 5px 15px !important;
             transition: transform 0.2s;
         }
-
-        .btn-sair-custom:hover {
-            transform: scale(1.05);
-        }
     </style>
-
 </head>
 
 
@@ -189,6 +261,11 @@
                         <li class="nav-item">
                             <a class="nav-link active" href="{{ route('usuarios.index') }}">Usuários</a>
                         </li>
+                        <li class="nav-item d-flex align-items-center me-2">
+                            <button id="theme-toggler" class="btn btn-sm btn-outline-light rounded-pill px-3">
+                                <i class="fas fa-palette me-1"></i> Trocar Tema
+                            </button>
+                        </li>
 
                         <li class="nav-item ms-lg-3">
                             <form method="POST" action="{{ route('logout') }}">
@@ -233,7 +310,27 @@
         SEMÂNTICA: Carrega a lógica do Bootstrap(como o funcionamento do menu mobile). 
         Fica no final para não travar o carregamento visual da página(Performance).
     --}}
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            const themeToggler = document.getElementById('theme-toggler');
+            const body = document.documentElement; // Pega o <html> para aplicar o atributo
+
+                // Verifica se já existe um tema salvo
+                const currentTheme = localStorage.getItem('theme') || 'default';
+                if (currentTheme === 'summer') {
+                    body.setAttribute('data-theme', 'summer');
+    }
+
+    themeToggler.addEventListener('click', () => {
+        if (body.getAttribute('data-theme') === 'summer') {
+                    body.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'default');
+        } else {
+                    body.setAttribute('data-theme', 'summer');
+                localStorage.setItem('theme', 'summer');
+        }
+    });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

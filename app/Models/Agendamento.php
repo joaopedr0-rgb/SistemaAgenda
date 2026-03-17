@@ -25,7 +25,7 @@ class Agendamento extends Model
      * para encher seu banco com 10 agendamentos de teste rapidamente.
      */
     use HasFactory;
-    
+
     // CORREÇÃO 1: Mudamos 'funcionario_id' para 'profissional_id'
     /*
      * SINTAXE: protected $fillable = [ array_de_strings ]
@@ -37,7 +37,7 @@ class Agendamento extends Model
     protected $fillable = [
         'cliente_id',
         'servico_id',
-        'profissional_id', 
+        'profissional_id',
         'data',
         'hora',
     ];
@@ -72,7 +72,12 @@ class Agendamento extends Model
          */
         return $this->belongsTo(Profissional::class);
     }
-    
+    public function servico()
+    {
+        // Indica que o Agendamento pertence a um Serviço
+        return $this->belongsTo(Servico::class, 'servico_id');
+    }
+
     // CORREÇÃO 3: Apaguei a função agendamento() que estava sobrando aqui.
     // (Nota de estudo: Excelente correção! Um Agendamento não precisa ter uma relação "pertence a" com ele mesmo nesse contexto, deletar foi a decisão correta).
 }

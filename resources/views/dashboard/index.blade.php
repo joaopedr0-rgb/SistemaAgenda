@@ -2,11 +2,19 @@
 
 @section('content')
 <style>
+    @keyframes gradientAnimation {
+        0% { background-position: 20% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 20% 50%; }
+    }
     /* Fundo da Dashboard acompanhando o tema */
     body {
-        background: linear-gradient(135deg, #3A0256 0%, #d81b60 100%) !important;
+         background: var(--bg-gradient) !important;
+        background-size: 400% 400% !important;
+        animation: gradientAnimation 15s ease infinite !important;
         background-attachment: fixed !important;
         min-height: 100vh;
+        transition: background 0.5s ease;
     }
 
     /* Título da Página */
@@ -26,6 +34,7 @@
         transition: all 0.3s ease;
         background: rgba(255, 255, 255, 0.95);
         box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        backdrop-filter: blur(5px);
     }
 
     .stat-card:hover {

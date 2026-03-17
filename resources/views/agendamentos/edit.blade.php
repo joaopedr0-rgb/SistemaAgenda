@@ -1,98 +1,212 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container py-4">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card border-0 shadow-sm">
+    <style>
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 20% 50%;
+            }
 
-                <div class="card-header bg-white py-3 border-0">
-                    {{-- SINTAXE: $agendamento->id --}}
-                    {{-- SEMÂNTICA: Exibe dinamicamente o número do registro que está sendo editado. --}}
-                    <h5 class="mb-0 fw-bold text-primary">Editar Agendamento #{{ $agendamento->id }}</h5>
-                </div>
+            50% {
+                background-position: 100% 50%;
+            }
 
-                <div class="card-body p-4">
-                    {{-- SINTAXE: route('nome', $id) --}}
-                    {{-- SEMÂNTICA: Gera a URL de destino incluindo o ID do registro no banco. --}}
-                    <form action="{{ route('agendamentos.update', $agendamento->id) }}" method="POST">
-                        @csrf
-                        
-                        {{-- 
-                          SINTAXE: @method('PUT')
-                          SEMÂNTICA: "Method Spoofing" (Falsificação de Método). 
-                          Como navegadores não suportam o método PUT em formulários HTML, o Laravel cria um campo oculto 
-                          para avisar ao servidor: "Receba este POST, mas trate-o como um UPDATE".
-                        --}}
-                        @method('PUT')
+            100% {
+                background-position: 20% 50%;
+            }
+        }
 
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <label for="cliente_id" class="form-label fw-bold">Cliente</label>
-                                <select name="cliente_id" id="cliente_id" class="form-select @error('cliente_id') is-invalid @enderror" required>
-                                    @foreach($clientes as $cliente)
-                                        {{-- 
-                                          SINTAXE: old('campo', $valor_padrao)
-                                          SEMÂNTICA: Lógica de Prioridade. 
-                                          1º: Se houve erro na validação, mostra o que o usuário tentou digitar (old).
-                                          2º: Se o formulário acabou de carregar, mostra o que já está salvo no banco ($agendamento).
-                                        --}}
-                                        <option value="{{ $cliente->id }}" {{ (old('cliente_id', $agendamento->cliente_id) == $cliente->id) ? 'selected' : '' }}>
-                                            {{ $cliente->nome }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('cliente_id')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+        /* Fundo padrão com degradê moderno */
+        body {
+            background: var(--bg-gradient) !important;
+            background-size: 400% 400% !important;
+            animation: gradientAnimation 15s ease infinite !important;
+            background-attachment: fixed !important;
+            min-height: 100vh;
+            transition: background 0.5s ease;
+        }
+
+        .custom-card-form {
+            border: none !important;
+            border-radius: 20px !important;
+            color: var(--text-primary) !important;
+            transition: color 0.5s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .card-header-custom {
+            color: var(--text-primary) !important;
+            transition: color 0.5s ease;
+            background: transparent !important;
+            border-bottom: 1px solid #eee !important;
+            padding: 25px !important;
+        }
+
+        .card-header-custom h4 {
+            color: var(--text-primary) !important;
+            font-weight: 800 !important;
+            margin: 0;
+        }
+
+        /* Estilização dos Rótulos e Inputs */
+        .form-label {
+            color: var(--text-primary) !important;
+            font-weight: 700 !important;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            transition: color 0.5s ease;
+
+        }
+
+        .form-control,
+        .form-select {
+            border-radius: 12px !important;
+            border: 2px solid #f0f0f0 !important;
+            padding: 12px !important;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: var(--text-primary) !important;
+            box-shadow: 0 0 0 0.25rem rgba(216, 27, 96, 0.1) !important;
+        }
+
+        /* Botões Customizados */
+        .btn-update-custom {
+            background: var(--bg-gradient) !important;
+            background-size: 400% 400% !important;
+            animation: gradientAnimation 10s ease infinite !important;
+            border: none !important;
+            color: white !important;
+            font-weight: bold !important;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .btn-update-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2) !important;
+            filter: brightness(1.1);
+        }
+
+        .btn-back-custom {
+            background: #f8f9fa !important;
+            color: #666 !important;
+            font-weight: 700 !important;
+            border: 1px solid #ddd !important;
+            padding: 12px 30px !important;
+            border-radius: 12px !important;
+            transition: all 0.3s;
+        }
+
+        .btn-back-custom:hover {
+            background: #eee !important;
+        }
+    </style>
+
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card custom-card-form">
+
+                    <div class="card-header-custom text-center">
+                        <h4><i class="fas fa-edit me-2"></i>Editar Agendamento{{ $agendamento->nome }}</h4>
+                    </div>
+
+                    <div class="card-body p-4">
+                        {{-- FUNCIONALIDADE MANTIDA: Rota update e Method Spoofing (PUT) --}}
+                        <form action="{{ route('agendamentos.update', $agendamento->id) }}" method="POST">
+                            @csrf
+                            @method('PUT')
+
+                            <div class="row">
+                                {{-- Seleção de Cliente --}}
+                                <div class="col-md-12 mb-3">
+                                    <label for="cliente_id" class="form-label">Cliente</label>
+                                    <select name="cliente_id" id="cliente_id"
+                                        class="form-select @error('cliente_id') is-invalid @enderror" required>
+                                        @foreach($clientes as $cliente)
+                                            <option value="{{ $cliente->id }}" {{ (old('cliente_id', $agendamento->cliente_id) == $cliente->id) ? 'selected' : '' }}>
+                                                {{ $cliente->nome }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('cliente_id')
+                                        <div class="invalid-feedback fw-bold">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                {{-- Seleção de Profissional --}}
+                                <div class="col-md-12 mb-3">
+                                    <label for="profissional_id" class="form-label">Profissional</label>
+                                    <select name="profissional_id" id="profissional_id"
+                                        class="form-select @error('profissional_id') is-invalid @enderror" required>
+                                        @foreach($profissionais as $profissional)
+                                            <option value="{{ $profissional->id }}" {{ (old('profissional_id', $agendamento->profissional_id) == $profissional->id) ? 'selected' : '' }}>
+                                                {{ $profissional->nome }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('profissional_id')
+                                        <div class="invalid-feedback fw-bold">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <label for="servico_id" class="form-label">Serviço</label>
+                                    <select name="servico_id" id="servico_id"
+                                        class="form-select @error('servico_id') is-invalid @enderror" required>
+                                        @foreach($servicos as $servico)
+                                            <option value="{{ $servico->id }}" {{ (old('servico_id', $agendamento->servico_id) == $servico->id) ? 'selected' : '' }}>
+                                                {{ $servico->nome }} - R$ {{ number_format($servico->preco, 2, ',', '.') }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('servico_id')
+                                        <div class="invalid-feedback fw-bold">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                {{-- Data --}}
+                                <div class="col-md-6 mb-3">
+                                    <label for="data" class="form-label">Data</label>
+                                    <input type="date" name="data" id="data"
+                                        class="form-control @error('data') is-invalid @enderror"
+                                        value="{{ old('data', $agendamento->data) }}" required>
+                                    @error('data')
+                                        <div class="invalid-feedback fw-bold">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                {{-- Hora (Formatada com Carbon) --}}
+                                <div class="col-md-6 mb-3">
+                                    <label for="hora" class="form-label">Hora</label>
+                                    <input type="time" name="hora" id="hora"
+                                        class="form-control @error('hora') is-invalid @enderror"
+                                        value="{{ old('hora', \Carbon\Carbon::parse($agendamento->hora)->format('H:i')) }}"
+                                        required>
+                                    @error('hora')
+                                        <div class="invalid-feedback fw-bold">{{ $message }}</div>
+                                    @enderror
+                                </div>
                             </div>
 
-                            <div class="col-md-12 mb-3">
-                                <label for="profissional_id" class="form-label fw-bold">Profissional</label>
-                                <select name="profissional_id" id="profissional_id" class="form-select @error('profissional_id') is-invalid @enderror" required>
-                                    @foreach($profissionais as $profissional)
-                                        <option value="{{ $profissional->id }}" {{ (old('profissional_id', $agendamento->profissional_id) == $profissional->id) ? 'selected' : '' }}>
-                                            {{ $profissional->nome }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('profissional_id')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
+                            <hr class="my-4 opacity-50">
 
-                            <div class="col-md-6 mb-3">
-                                <label for="data" class="form-label fw-bold">Data</label>
-                                <input type="date" name="data" id="data" class="form-control @error('data') is-invalid @enderror" value="{{ old('data', $agendamento->data) }}" required>
-                                @error('data')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
+                            <div class="d-flex justify-content-between">
+                                <a href="{{ route('agendamentos.index') }}"
+                                    class="btn btn-back-custom text-decoration-none">
+                                    <i class="fas fa-arrow-left me-1"></i> Voltar
+                                </a>
 
-                            <div class="col-md-6 mb-3">
-                                <label for="hora" class="form-label fw-bold">Hora</label>
-                                {{-- 
-                                  SINTAXE: \Carbon\Carbon::parse($valor)->format('H:i')
-                                  SEMÂNTICA: Formatação de Tempo. 
-                                  O banco de dados às vezes retorna a hora como "14:30:00". 
-                                  O campo <input type="time"> exige o formato "14:30" para funcionar corretamente. 
-                                  Aqui você usou o Carbon (biblioteca de data/hora) para garantir a compatibilidade.
-                                --}}
-                                <input type="time" name="hora" id="hora" class="form-control @error('hora') is-invalid @enderror" value="{{ old('hora', \Carbon\Carbon::parse($agendamento->hora)->format('H:i')) }}" required>
-                                @error('hora')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                                <button type="submit" class="btn btn-update-custom">
+                                    <i class="fas fa-save me-1"></i> Atualizar Agendamento
+                                </button>
                             </div>
-
-                            <div class="col-md-12 d-flex justify-content-end mt-3">
-                                <a href="{{ route('agendamentos.index') }}" class="btn btn-light me-2">Voltar</a>
-                                <button type="submit" class="btn btn-primary px-4">Atualizar Agendamento</button>
-                            </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 @endsection

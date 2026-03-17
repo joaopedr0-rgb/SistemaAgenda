@@ -2,12 +2,29 @@
 
 @section('content')
 <style>
-    /* 1. O Fundo da TELA com o seu degradê Roxo e Rosa */
-    body {
-        background: linear-gradient(135deg, #3A0256 0%, #d81b60 100%) !important;
-        background-attachment: fixed !important; /* Garante que o fundo cubra a tela toda perfeitamente */
+     @keyframes gradientAnimation {
+        0% { background-position: 20% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 20% 50%; }
     }
-
+    /* 1. O Fundo da TELA com o seu degradê Roxo e Rosa */
+   body {
+          background: var(--bg-gradient) !important;
+        background-size: 400% 400% !important;
+        animation: gradientAnimation 10s ease infinite !important;
+        border: none !important;
+        color: white !important;
+        font-weight: bold !important;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+     .custom-card-form {
+        border: none !important;
+        border-radius: 20px !important;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        color: white !important;
+        backdrop-filter: blur(5px);
+    }
     /* 2. Centraliza o card na tela */
     .login-container {
         min-height: calc(100vh - 100px);
@@ -67,7 +84,7 @@
 
     /* Quando clica no input (Focus) */
     .form-control:focus {
-        border-color: #d81b60;
+        border-color: var(--bg-gradient) !important;
         background-color: #ffffff;
         box-shadow: 0 0 0 4px rgba(216, 27, 96, 0.15);
         outline: none;
@@ -75,7 +92,7 @@
 
     /* 7. O Botão (Escuro para dar contraste com o card branco e combinar com o fundo) */
     .btn-submit {
-        background-color: #3A0256;
+        background-color:var(--text-primary)!important;
         border: none;
         padding: 14px;
         font-weight: 700;
@@ -90,7 +107,9 @@
     }
 
     .btn-submit:hover {
-        background-color: #550480;
+        background-color: var(--bg-gradient);
+        background-size: 400% 400% !important;
+        animation: gradientAnimation 10s ease infinite !important;
         transform: translateY(-2px);
         box-shadow: 0 8px 20px rgba(58, 2, 86, 0.4);
         color: #ffffff;
