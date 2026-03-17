@@ -39,7 +39,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
  * O GET exibe o formulário para o usuário, e o POST processa os dados de forma invisível e segura.
  */
 Route::get('/cadastro', [CadastroController::class, 'create'])->name('cadastro');
-Route::post('/cadastro', [CadastroController::class, 'store']);
+Route::post('/cadastro', [CadastroController::class, 'store'])->name('cadastro');
 
 Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'authenticate'])->name('login.authenticate');

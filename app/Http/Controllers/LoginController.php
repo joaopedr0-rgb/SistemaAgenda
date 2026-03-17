@@ -63,7 +63,7 @@ class LoginController extends Controller
              * foi barrado por não estar logado e mandado pro login, o 'intended' lembra disso e o joga 
              * de volta para '/profissionais'. Se ele veio direto para o login, cai na rota padrão.
              */
-            return redirect()->intended('/profissionais');
+            return redirect()->intended('/dashboard');
         }
 
         /*

@@ -158,6 +158,7 @@ class AgendamentosController extends Controller
         */
         $clientes = Cliente::all();
         $profissionais = Profissional::all();
+        $servicos = Servico::all();
 
         /*
         SINTAXE/SEMÂNTICA: Envia 3 variáveis para a view: o registro atual ($agendamento) e as listas preenchidas.
@@ -180,7 +181,7 @@ class AgendamentosController extends Controller
             'profissional_id' => 'required|exists:profissionais,id', /* ERRO CORRIGIDO para 'profissionais' mantido */
             'servico_id'      => 'required|exists:servicos,id',
             'data'            => 'required|date',
-            'hora'            => 'required|date_format:H:i',
+            'hora'            => 'required',
         ]);
 
         /*

@@ -1,120 +1,204 @@
-{{-- 
-    SINTAXE: @extends('caminho.nome_do_arquivo')
-    SEMÂNTICA: Implementa o conceito de Herança de Templates. 
-    Este arquivo diz ao Laravel para usar o "esqueleto" (layout) definido em 'resources/views/layouts/app.blade.php'.
---}}
 @extends('layouts.app')
 
-{{-- 
-    SINTAXE: @section('nome') ... @endsection
-    SEMÂNTICA: Define um bloco de conteúdo que será injetado no local correspondente 
-    ao comando @yield('content') dentro do arquivo pai (o layout).
---}}
 @section('content')
+    <style>
+        /* Fundo da tela acompanhando o tema */
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 20% 50%;
+            }
 
-<div class="card border-0 shadow-sm">
-    
-    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-        <h5 class="mb-0 fw-bold">Clientes Registrados</h5>
-        
-        {{-- 
-            SINTAXE: {{ route('nome.da.rota') }}
-            SEMÂNTICA: Função auxiliar (helper) que gera a URL completa dinamicamente. 
-            Se você mudar o prefixo da URL no arquivo de rotas, o link não quebra.
-        --}}
-        <a href="{{ route('clientes.create') }}" class="btn btn-primary btn-sm px-3">+ Novo</a>
-    </div>
+            50% {
+                background-position: 100% 50%;
+            }
 
-    <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0">
-            <thead class="table-light">
-                <tr>
-                    <th class="ps-4">Nome</th>
-                    <th>Contato</th>
-                    <th>Status</th>
-                    <th class="text-end pe-4">Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                
-                {{-- 
-                    SINTAXE: @forelse($colecao as $item) ... @empty ... @endforelse
-                    SEMÂNTICA: É um loop "inteligente". Tenta percorrer a lista de $clientes. 
-                    Se a lista estiver vazia (sem registros), ele ignora o loop e executa o que está no @empty.
-                --}}
-                @forelse($clientes as $cliente)
-                <tr>
-                    <td class="ps-4">
-                        {{-- 
-                            SINTAXE: {{ $variavel }}
-                            SEMÂNTICA: Imprime o dado na tela (eco seguro). 
-                            O Blade aplica automaticamente htmlspecialchars() para evitar ataques de XSS (Cross-Site Scripting).
-                        --}}
-                        <div class="fw-bold">{{ $cliente->nome }}</div>
-                        <small class="text-muted">ID: #{{ $cliente->id }}</small>
-                    </td>
-                    <td>
-                        <div>{{ $cliente->email }}</div>
-                        
-                        {{-- 
-                            SINTAXE: $a ?? 'padrão' (Operador de Coalescência Nula do PHP)
-                            SEMÂNTICA: "Tente exibir o telefone. Se ele for null ou não existir, exiba 'Sem telefone'".
-                        --}}
-                        <small class="text-muted">{{ $cliente->telefone ?? 'Sem telefone' }}</small>
-                    </td>
-                    <td>
-                        {{-- 
-                            SINTAXE: Operador Ternário dentro de chaves Blade.
-                            SEMÂNTICA: Lógica visual dinâmica. Se o status for 'ativo', aplica a classe 'bg-success' (verde), 
-                            caso contrário, aplica 'bg-secondary' (cinza).
-                        --}}
-                        <span class="badge rounded-pill {{ $cliente->status == 'ativo' ? 'bg-success' : 'bg-secondary' }}">
-                            
-                            {{-- SINTAXE: ucfirst() -> Função do PHP para tornar a primeira letra maiúscula. --}}
-                            {{ ucfirst($cliente->status) }}
-                        </span>
-                    </td>
-                    <td class="text-end pe-4">
-                        
-                        {{-- 
-                            SINTAXE: Formulário de exclusão.
-                            SEMÂNTICA: Operações que alteram dados (Delete/Update) devem ser feitas via formulário 
-                            e nunca por links simples (GET), para garantir a integridade e segurança.
-                        --}}
-                        <form action="{{ route('clientes.destroy', $cliente->id) }}" method="POST">
-                            
-                            <a href="{{ route('clientes.edit', $cliente->id) }}" class="btn btn-sm btn-outline-secondary">Editar</a>
-                            
-                            {{-- 
-                                SINTAXE: @csrf
-                                SEMÂNTICA: Cross-Site Request Forgery. Gera um token único oculto. 
-                                O Laravel valida este token no servidor para garantir que a requisição veio do seu próprio site.
-                            --}}
-                            @csrf
-                            
-                            {{-- 
-                                SINTAXE: @method('DELETE')
-                                SEMÂNTICA: "Falsificação de método". Como navegadores HTML só aceitam GET e POST, 
-                                o Blade envia um campo oculto que avisa ao roteador do Laravel para tratar esta ação como DELETE.
-                            --}}
-                            @method('DELETE')
-                            
-                            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Excluir este cliente?')">Excluir</button>
-                        </form>
-                    </td>
-                </tr>
-                
-                @empty
-                {{-- Exibido apenas se a variável $clientes estiver vazia --}}
-                <tr>
-                    <td colspan="4" class="text-center py-4 text-muted">Nenhum cliente cadastrado.</td>
-                </tr>
-                
-                @endforelse
-                
-            </tbody>
-        </table>
+            100% {
+                background-position: 20% 50%;
+            }
+        }
+
+        .container h2,
+        .container h3,
+        .page-title,
+        .text-white-custom {
+            color: #ffffff !important;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3) !important;
+            transition: none !important;
+            /* Mantém branco independente do tema */
+        }
+
+        /* Fundo da Dashboard acompanhando o tema */
+        body {
+            background: var(--bg-gradient) !important;
+            background-size: 400% 400% !important;
+            animation: gradientAnimation 15s ease infinite !important;
+            background-attachment: fixed !important;
+            min-height: 100vh;
+            transition: background 0.5s ease;
+        }
+
+        .custom-card-form {
+            color: var(--text-primary) !important;
+            border: none !important;
+            border-radius: 20px !important;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3) !important;
+            transition: color 0.5s ease;
+        }
+
+        /* Estilo do Card da Tabela */
+        .custom-card-table {
+            color: var(--text-primary) !important;
+            border: none !important;
+            border-radius: 20px !important;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+            transition: color 0.5s ease;
+        }
+
+        /* Cabeçalho da Tabela */
+        .table thead th {
+            background-color: #f8f9fa !important;
+            color: var(--text-primary) !important;
+            font-weight: 700 !important;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #eee !important;
+        }
+
+        /* Linhas da Tabela */
+        .table tbody td {
+            vertical-align: middle !important;
+            color: var(--text-primary) !important;
+        }
+
+        /* Badges de Status Personalizados */
+        .badge-ativo {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+            padding: 6px 12px !important;
+            border-radius: 50px !important;
+            color: white !important;
+        }
+
+        .badge-inativo {
+            background: #6c757d !important;
+            padding: 6px 12px !important;
+            border-radius: 50px !important;
+        }
+
+        /* Botões de Ação */
+        .btn-edit-custom {
+            color: var(--text-primary) !important;
+            border: 1px solid var(--text-primary) !important;
+            font-weight: 600 !important;
+            transition: all 0.3s;
+        }
+
+        .btn-edit-custom:hover {
+            background-color: var(--text-primary) !important;
+            color: white !important;
+        }
+
+        .btn-delete-custom {
+            color: var(--text-primary) !important;
+            border: 1px solid var(--text-primary) !important;
+            font-weight: 600 !important;
+            transition: all 0.3s;
+        }
+
+        .btn-delete-custom:hover {
+            background-color: var(--text-primary) !important;
+            color: white !important;
+        }
+
+        /* Botão "+ Novo" */
+        .btn-novo {
+            background: white !important;
+            color: var(--text-primary) !important;
+            font-weight: 800 !important;
+            border: none !important;
+            border-radius: 12px !important;
+            padding: 10px 20px !important;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+            transition: all 0.3s;
+        }
+
+        .btn-novo:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2) !important;
+        }
+    </style>
+
+    <div class="container py-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="fw-bold text-white mb-0">Clientes Registrados</h3>
+            <a href="{{ route('clientes.create') }}" class="btn btn-novo">
+                <i class="fas fa-plus-circle mr-2"></i> Novo Cliente
+            </a>
+        </div>
+
+        <div class="card custom-card-table">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th class="ps-4 py-3">Nome</th>
+                                <th>Contato</th>
+                                <th>Status</th>
+                                <th class="text-end pe-4">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($clientes as $cliente)
+                                <tr>
+                                    <td class="ps-4">
+                                        <div class="fw-bold text-dark">{{ $cliente->nome }}</div>
+                                        <small class="text-muted">ID: #{{ $cliente->id }}</small>
+                                    </td>
+                                    <td>
+                                        <div><i class="far fa-envelope text-muted me-1"></i> {{ $cliente->email }}</div>
+                                        <small class="text-muted">
+                                            <i class="fas fa-phone-alt text-muted me-1"></i>
+                                            {{ $cliente->telefone ?? 'Sem telefone' }}
+                                        </small>
+                                    </td>
+                                    <td>
+                                        <span class="badge {{ $cliente->status == 'ativo' ? 'badge-ativo' : 'badge-inativo' }}">
+                                            {{ ucfirst($cliente->status) }}
+                                        </span>
+                                    </td>
+                                    <td class="text-end pe-4">
+                                        <form action="{{ route('clientes.destroy', $cliente->id) }}" method="POST"
+                                            class="d-inline">
+                                            <a href="{{ route('clientes.edit', $cliente->id) }}"
+                                                class="btn btn-sm btn-edit-custom me-1">
+                                                Editar
+                                            </a>
+
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-delete-custom"
+                                                onclick="return confirm('Excluir este cliente?')">
+                                                Excluir
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4" class="text-center py-5 text-muted">
+                                        <i class="fas fa-users-slash fa-2x d-block mb-3 opacity-50"></i>
+                                        Nenhum cliente cadastrado no momento.
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
 
 @endsection
