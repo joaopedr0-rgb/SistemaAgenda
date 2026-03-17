@@ -77,7 +77,7 @@ class CadastroController extends Controller
         // --- ETAPA 3: RESPOSTA ---
         // Sintaxe: redirect()->route('nome_da_rota').
         // Semântica: Após salvar, manda o usuário para a página inicial de clientes.
-        return redirect()->route('clientes.index');
+        return redirect()->route('dashboard.index');
     }
 
     /*

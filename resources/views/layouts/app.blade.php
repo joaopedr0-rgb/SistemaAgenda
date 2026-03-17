@@ -17,24 +17,89 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
+        /* Animação de entrada da Navbar */
+        <style>
+
+        /* Animação de entrada suave */
+        @keyframes fadeInNavbar {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Navbar com degradê Roxo -> Rosa */
+        .navbar-brand-custom {
+            font-family: 'Poppins', sans-serif;
+            /* Se não tiver essa fonte, ele usará a padrão, mas recomendo */
+            font-weight: 900 !important;
+            font-size: 1.7rem !important;
+            letter-spacing: -1px !important;
+            text-transform: uppercase;
             display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            /* Mantém o rodapé no fundo mesmo com pouco conteúdo */
+            align-items: center;
+            transition: all 0.3s ease;
         }
 
-        .main-content {
-            flex: 1;
+        .brand-first-word {
+            color: #ffffff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
         }
 
-        /* Faz esta área "esticar" para preencher o espaço vazio */
+        .brand-second-word {
+            background: #ffffff;
+            color: #3A0256;
+            /* Roxo escuro para contraste */
+            padding: 2px 8px;
+            border-radius: 6px;
+            margin-left: 5px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .navbar-custom {
+            background: linear-gradient(135deg, #3A0256 0%, #d81b60 100%) !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            animation: fadeInNavbar 0.6s ease-out;
+            border: none !important;
+        }
+
+        /* Estilo do Nome do Sistema */
         .navbar-brand {
-            font-weight: 600;
-            letter-spacing: -0.5px;
+            font-weight: 800 !important;
+            letter-spacing: 1px;
+        }
+
+        /* Estilo dos Links */
+        .nav-link {
+            font-weight: 600 !important;
+            transition: all 0.3s ease !important;
+            border-radius: 8px;
+            margin: 0 2px;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff !important;
+        }
+
+        /* Estilo do Botão Sair (Light que você já usa, mas ajustado) */
+        .btn-sair-custom {
+            font-weight: bold !important;
+            border-radius: 8px !important;
+            padding: 5px 15px !important;
+            transition: transform 0.2s;
+        }
+
+        .btn-sair-custom:hover {
+            transform: scale(1.05);
         }
     </style>
+
 </head>
 
 
@@ -91,34 +156,44 @@
 
     {{-- Barra de Navegação Superior --}}
     @if (!Route::is('login') && !Route::is('cadastro'))
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm mb-5">
+        <nav class="navbar navbar-expand-lg navbar-dark navbar-custom shadow-sm mb-5">
             <div class="container">
                 {{-- Link para a raiz do site --}}
-                <a class="navbar-brand" href="/">
-                    Sistema de Agenda
+                <a class="navbar-brand navbar-brand-custom" href="/">
+                    <span class="brand-first-word">SCHEDULE</span>
+                    <span class="brand-second-word">ONLINE</span>
                 </a>
 
                 {{-- Botão "Hambúrguer" para dispositivos móveis --}}
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item"><a class="nav-link active"
-                                href="{{ route('profissionais.index') }}">Profissionais</a></li>
-                        <li class="nav-item"><a class="nav-link active" href="{{ route('clientes.index') }}">Clientes</a>
+                <div class="collapse navbar-collapse" id="navbarMain">
+                    <ul class="navbar-nav ms-auto align-items-center">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{ route('dashboard.index') }}">Início</a>
                         </li>
-                        <li class="nav-item"><a class="nav-link active" href="{{ route('servicos.index') }}">Serviços</a>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{ route('profissionais.index') }}">Profissionais</a>
                         </li>
-                        <li class="nav-item"><a class="nav-link active"
-                                href="{{ route('agendamentos.index') }}">Agendamentos</a></li>
-                        <li class="nav-item"><a class="nav-link active" href="{{ route('usuarios.index') }}">Usuarios</a>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{ route('clientes.index') }}">Clientes</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{ route('servicos.index') }}">Serviços</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{ route('agendamentos.index') }}">Agendamentos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{ route('usuarios.index') }}">Usuários</a>
+                        </li>
+
                         <li class="nav-item ms-lg-3">
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
-                                <button type="submit" class="btn btn-light btn-sm">
+                                <button type="submit" class="btn btn-light btn-sm btn-sair-custom">
                                     Sair
                                 </button>
                             </form>
