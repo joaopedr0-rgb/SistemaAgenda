@@ -40,6 +40,9 @@ class Agendamento extends Model
         'profissional_id',
         'data',
         'hora',
+        'status',              // SINTAXE: String. SEMÂNTICA: Armazena o estado do serviço (ex: pendente, concluído).
+        'valor_comissao_pago', // SINTAXE: Decimal. SEMÂNTICA: Guarda o valor em Reais da comissão calculada no dia.
+
     ];
 
     // CORREÇÃO 2: Tiramos as aspas simples de dentro dos parênteses
@@ -72,10 +75,24 @@ class Agendamento extends Model
          */
         return $this->belongsTo(Profissional::class);
     }
+    /*
+     * SINTAXE: public function servico()
+     * SEMÂNTICA: Define que o Agendamento pertence a um Serviço.
+     * Crucial para buscar o preço e a porcentagem de comissão cadastrados no serviço.
+     */
     public function servico()
     {
         // Indica que o Agendamento pertence a um Serviço
         return $this->belongsTo(Servico::class, 'servico_id');
+    }
+    /*
+     * SINTAXE: public function getValorComissaoFormatadoAttribute()
+     * SEMÂNTICA: Cria um "Acessor". Permite exibir o valor da comissão já com o símbolo R$ e vírgulas 
+     * diretamente na View usando {{ $agendamento->valor_comissao_formatado }}.
+     */
+    public function getValorComissaoFormatadoAttribute()
+    {
+        return 'R$ ' . number_format($this->valor_comissao_pago, 2, ',', '.');
     }
 
     // CORREÇÃO 3: Apaguei a função agendamento() que estava sobrando aqui.

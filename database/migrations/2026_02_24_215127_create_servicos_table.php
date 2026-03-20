@@ -45,6 +45,14 @@ return new class extends Migration
              * Exemplo: Pode armazenar até R$ 999.999,99.
              */
             $table->decimal('preco', 8, 2);
+
+            /*
+             * SINTAXE: $table->decimal('comissao_percentual', 5, 2);
+             * SEMÂNTICA: como se trata de uma porcentagem, o máximo de digitos são 5 (100.00), e o defatult serve para assegurar a integridade de dados,
+             * se não for cadastrado a porcentagem, o programa assume que a porcentagem é 0.00.
+            */
+
+            $table->decimal('comissao_percentual', 5, 2)->default(0.00);
             
             /*
              * SINTAXE: $table->integer('duracao');

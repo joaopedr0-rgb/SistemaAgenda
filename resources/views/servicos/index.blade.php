@@ -147,6 +147,7 @@
                             <tr>
                                 <th class="ps-4 py-3">Nome do Serviço</th>
                                 <th>Preço</th>
+                                <th>Comissão</th> {{-- NOVA COLUNA --}}
                                 <th>Duração</th>
                                 <th>Status</th>
                                 <th class="text-end pe-4">Ações</th>

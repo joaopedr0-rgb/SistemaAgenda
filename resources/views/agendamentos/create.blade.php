@@ -161,7 +161,7 @@
                                         <option value="">Selecione o Serviço</option>
                                         @foreach($servicos as $servico)
                                             <option value="{{ $servico->id }}" {{ old('servico_id') == $servico->id ? 'selected' : '' }}>
-                                                {{ $servico->nome }}
+                                                {{ $servico->nome }} - R$ {{ number_format($servico->preco, 2, ',', '.') }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -192,7 +192,8 @@
                                     @enderror
                                 </div>
                             </div>
-
+                            <input type="hidden" name="status" value="pendente">
+                            <input type="hidden" name="valor_comissao_pago" value="0.00">
                             <hr class="text-light my-4">
 
                             <div class="d-flex justify-content-between mt-3">
