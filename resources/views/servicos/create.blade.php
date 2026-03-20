@@ -210,6 +210,21 @@ do arquivo base (app.blade.php), mantendo o cabeçalho e rodapé padrão.
                                     @enderror
                                 </div>
 
+                                {{-- Campo comissão --}}
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Comissão (%)</label>
+                                    <div class="input-group">
+                                        <input type="number" name="comissao_percentual" 
+                                            class="form-control @error('comissao_percentual') is-invalid @enderror" 
+                                            value="{{ old('comissao_percentual', 30) }}" {{-- Sugere 30% por padrão --}}
+                                            placeholder="Ex: 30" required min="0" max="100">
+                                        <span class="input-group-text">%</span>
+                                    </div>
+                                    @error('comissao_percentual')
+                                        <div class="invalid-feedback d-block fw-bold">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
                                 {{-- Campo: Status --}}
                                 <div class="col-md-12 mb-3">
                                     <label class="form-label">Status do Serviço</label>
@@ -217,8 +232,7 @@ do arquivo base (app.blade.php), mantendo o cabeçalho e rodapé padrão.
                                         required>
                                         <option value="">Selecione um status...</option>
                                         <option value="Ativo" {{ old('status') == 'Ativo' ? 'selected' : '' }}>Ativo</option>
-                                        <option value="Inativo" {{ old('status') == 'Inativo' ? 'selected' : '' }}>Inativo
-                                        </option>
+                                        <option value="Inativo" {{ old('status') == 'Inativo' ? 'selected' : '' }}>Inativo</option>
                                     </select>
                                     @error('status')
                                         <div class="invalid-feedback d-block fw-bold">{{ $message }}</div>

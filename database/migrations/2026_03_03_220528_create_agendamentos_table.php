@@ -72,6 +72,21 @@ return new class extends Migration
             $table->time('hora')->nullable();
 
             /*
+             * SINTAXE: $table->string('status')->default('pendente');
+             * SEMÂNTICA: Define o estado atual do agendamento. 
+             * Começa como 'pendente' e mudará para 'concluido' quando o serviço for finalizado.
+             */
+            $table->string('status')->default('pendente');
+
+            /*
+             * SINTAXE: $table->decimal('valor_comissao_pago', 8, 2)->default(0.00);
+             * SEMÂNTICA: 💰 IMPORTANTE! Registra o valor exato em Reais que o profissional ganhou.
+             * Salvamos aqui para que, se o preço do serviço mudar no futuro, o histórico financeiro 
+             * deste atendimento permaneça correto.
+             */
+            $table->decimal('valor_comissao_pago', 8, 2)->default(0.00);
+
+            /*
              * SINTAXE: $table->timestamps();
              * SEMÂNTICA: Registra quando o agendamento foi marcado e quando foi alterado pela última vez.
              */

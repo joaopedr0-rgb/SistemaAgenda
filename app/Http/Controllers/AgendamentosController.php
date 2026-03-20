@@ -124,6 +124,18 @@ class AgendamentosController extends Controller
             SINTAXE/SEMÂNTICA: 'date_format:H:i' obriga que a string recebida venha estritamente no formato Hora:Minuto (Ex: 14:30).
             */
             'hora'            => 'required|date_format:H:i',
+
+            /* * SINTAXE: 'status' => 'required'
+            * SEMÂNTICA: Captura o valor 'pendente' enviado pelo campo oculto (hidden) do seu formulário. 
+            * Isso define o estado inicial do atendimento no sistema.
+            */
+            'status'          => 'required',
+
+            /* * SINTAXE: 'valor_comissao_pago' => 'required'
+            * SEMÂNTICA: Recebe o valor '0.00' inicial. Este campo será atualizado futuramente 
+            * pelo método concluir() quando o serviço for finalizado de fato.
+            */
+            'valor_comissao_pago' => 'required'
         ]);
         
         /*
@@ -217,5 +229,43 @@ class AgendamentosController extends Controller
         passando a mensagem de confirmação de remoção.
         */
         return redirect()->route('agendamentos.index')->with('success', 'Agendamento removido!');
+    }
+    /*
+    SINTAXE: public function concluir(Agendamento $agendamento)
+    SEMÂNTICA: Este método é um "Custom Action" (Ação Personalizada). 
+    Ele não faz parte do CRUD padrão, mas é essencial para a regra de negócio do salão: 
+    mudar o status para concluído e registrar quanto o profissional ganhou de comissão.
+    */
+    public function concluir(Agendamento $agendamento)
+    {
+        /*
+        SINTAXE: $agendamento->servico
+        SEMÂNTICA: O Laravel acessa o relacionamento 'servico' definido no Model Agendamento.
+        */
+        $servico = $agendamento->servico;
+
+        /*
+        SINTAXE: ($valor * $porcentagem) / 100
+        SEMÂNTICA: Lógica matemática para extrair a comissão. 
+        Buscamos o 'preco' e a 'comissao_percentual' diretamente da tabela de servicos.
+        */
+        $valorComissao = ($servico->preco * $servico->comissao_percentual) / 100;
+
+        /*
+        SINTAXE: $agendamento->update([...])
+        SEMÂNTICA: Registramos o "fato gerador" financeiro. 
+        Mesmo que o preço do serviço mude amanhã, o valor que o profissional 
+        ganhou neste atendimento específico ficará salvo na coluna 'valor_comissao_pago'.
+        */
+        $agendamento->update([
+            'status' => 'concluido',
+            'valor_comissao_pago' => $valorComissao,
+        ]);
+
+        /*
+        SINTAXE: redirect()->back()
+        SEMÂNTICA: Retorna o usuário para a página onde ele clicou no botão (geralmente a lista de agendamentos).
+        */
+        return redirect()->route('agendamentos.index')->with('success', 'Serviço finalizado e comissão calculada!');
     }
 }
