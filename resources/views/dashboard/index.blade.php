@@ -1,130 +1,203 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Agenda</title>
 
-@section('content')
-<style>
-    @keyframes gradientAnimation {
-        0% { background-position: 20% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 20% 50%; }
-    }
-    /* Fundo da Dashboard acompanhando o tema */
-    body {
-         background: var(--bg-gradient) !important;
-        background-size: 400% 400% !important;
-        animation: gradientAnimation 15s ease infinite !important;
-        background-attachment: fixed !important;
-        min-height: 100vh;
-        transition: background 0.5s ease;
-    }
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    /* Título da Página */
-    .page-title {
-        color: white;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        margin-bottom: 30px;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-    }
+    <style>
+        /* =========================
+           🎨 TEMAS COM DEGRADÊ
+        ========================= */
 
-    /* Cards de Estatísticas */
-    .stat-card {
-        border: none;
-        border-radius: 20px;
-        transition: all 0.3s ease;
-        background: rgba(255, 255, 255, 0.95);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        backdrop-filter: blur(5px);
-    }
+        /* 💅 FEMININO */
+        :root {
+            --bg-gradient: linear-gradient(135deg, #000000, #1a1a1a, #ff4d88);
+            --card-bg: #1a1a1a;
 
-    .stat-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-    }
+            --text-primary: #ff4d88;
+            --text-secondary: #d4af37;
 
-    .stat-icon {
-        font-size: 2.5rem;
-        margin-bottom: 10px;
-        background: linear-gradient(135deg, #3A0256 0%, #d81b60 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
+            --btn-main: linear-gradient(135deg, #ff4d88, #d4af37);
+            --btn-hover: #ff4d88;
+        }
 
-    .stat-value {
-        font-size: 2rem;
-        font-weight: 900;
-        color: #333;
-    }
+        /* 💈 MASCULINO */
+        [data-theme="masculino"] {
+            --bg-gradient: linear-gradient(135deg, #000000, #1a1a1a, #0d47a1);
+            --card-bg: #1a1a1a;
 
-    .stat-label {
-        color: #666;
-        font-weight: 600;
-        text-transform: uppercase;
-        font-size: 0.8rem;
-    }
+            --text-primary: #0d47a1;
+            --text-secondary: #b71c1c;
 
-    /* Botões de Ação Rápida */
-    .btn-quick-action {
-        border-radius: 15px;
-        padding: 15px;
-        font-weight: 700;
-        text-transform: uppercase;
-        transition: all 0.3s;
-        border: 2px solid white;
-        background: rgba(255, 255, 255, 0.1);
-        color: white;
-    }
+            --btn-main: linear-gradient(135deg, #0d47a1, #b71c1c, #d4af37);
+            --btn-hover: #0d47a1;
+        }
 
-    .btn-quick-action:hover {
-        background: white;
-        color: #3A0256;
-    }
-</style>
+        /* =========================
+           BASE
+        ========================= */
 
-<div class="container pb-5">
-    <div class="row">
-        <div class="col-12 text-center">
-            <h1 class="page-title">Bem-vindo ao Dashboard</h1>
-            <p class="text-white opacity-75 mb-5">Visão geral do seu sistema de agendamentos</p>
+        body {
+            background: var(--bg-gradient) !important;
+            min-height: 100vh;
+            color: white;
+        }
+
+        .navbar-custom {
+            background: #000 !important;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* =========================
+           TEXTOS
+        ========================= */
+
+        .form-label,
+        h1, h2, h3, h4, h5,
+        .fw-bold {
+            color: var(--text-primary) !important;
+        }
+
+        /* =========================
+           CARDS
+        ========================= */
+
+        .card,
+        .custom-card-form,
+        .custom-card-table {
+            background: var(--card-bg) !important;
+            border-radius: 16px !important;
+            color: white !important;
+            border: 1px solid rgba(255,255,255,0.05) !important;
+        }
+
+        /* =========================
+           BOTÕES
+        ========================= */
+
+        .btn-save-custom,
+        .btn-update-custom,
+        .btn-edit-custom {
+            background: var(--btn-main) !important;
+            border: none !important;
+            color: white !important;
+            font-weight: bold !important;
+            transition: 0.3s;
+        }
+
+        .btn-save-custom:hover,
+        .btn-update-custom:hover,
+        .btn-edit-custom:hover {
+            background: var(--btn-hover) !important;
+            transform: translateY(-2px);
+        }
+
+        .nav-link {
+            color: rgba(255,255,255,0.7) !important;
+        }
+
+        .nav-link:hover {
+            color: white !important;
+        }
+
+        .brand-first-word {
+            color: white;
+        }
+
+        .brand-second-word {
+            color: var(--text-secondary); /* dourado */
+        }
+
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark navbar-custom mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <span class="brand-first-word">SCHEDULE</span>
+            <span class="brand-second-word">ONLINE</span>
+        </a>
+
+        <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarMain">
+            <ul class="navbar-nav ms-auto align-items-center">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('dashboard.index') }}">Início</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('clientes.index') }}">Clientes</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('agendamentos.index') }}">Agendamentos</a>
+                </li>
+
+                <li class="nav-item me-2">
+                    <button id="theme-toggler" class="btn btn-sm btn-outline-light rounded-pill px-3">
+                        💅 Feminino
+                    </button>
+                </li>
+
+                <li class="nav-item">
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button class="btn btn-light btn-sm">Sair</button>
+                    </form>
+                </li>
+
+            </ul>
         </div>
     </div>
+</nav>
 
-    {{-- Cards de Resumo --}}
-    <div class="row text-center">
-        {{-- Exemplo de Card Funcional --}}
-        <div class="col-md-3 mb-4">
-            <div class="card stat-card p-4">
-                <i class="fas fa-user-md stat-icon"></i>
-                <div class="stat-value">{{ $profissionaisCount ?? '0' }}</div>
-                <div class="stat-label">Profissionais</div>
-            </div>
-        </div>
+<main class="container">
+    @yield('content')
+</main>
 
-        <div class="col-md-3 mb-4">
-            <div class="card stat-card p-4">
-                <i class="fas fa-users stat-icon"></i>
-                <div class="stat-value">{{ $clientesCount ?? '0' }}</div>
-                <div class="stat-label">Clientes</div>
-            </div>
-        </div>
+<footer class="text-center py-3 mt-5" style="color: #aaa;">
+    <small>&copy; 2026 Sistema de Agenda</small>
+</footer>
 
-        <div class="col-md-3 mb-4">
-            <div class="card stat-card p-4">
-                <i class="fas fa-concierge-bell stat-icon"></i>
-                <div class="stat-value">{{ $servicosCount ?? '0' }}</div>
-                <div class="stat-label">Serviços</div>
-            </div>
-        </div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const button = document.getElementById('theme-toggler');
 
-        <div class="col-md-3 mb-4">
-            <div class="card stat-card p-4">
-                <i class="fas fa-calendar-check stat-icon"></i>
-                <div class="stat-value">{{ $agendamentosCount ?? '0' }}</div>
-                <div class="stat-label">Agendamentos</div>
-            </div>
-        </div>
-    </div>
+    const temaSalvo = localStorage.getItem('tema') || 'feminino';
+    aplicarTema(temaSalvo);
 
-    {{-- Ações Rápidas --}}
-   
-@endsection
+    button.addEventListener('click', function () {
+        let temaAtual = document.documentElement.getAttribute('data-theme');
+
+        if (temaAtual === 'masculino') {
+            aplicarTema('feminino');
+        } else {
+            aplicarTema('masculino');
+        }
+    });
+
+    function aplicarTema(tema) {
+        if (tema === 'masculino') {
+            document.documentElement.setAttribute('data-theme', 'masculino');
+            button.innerHTML = "💈 Masculino";
+            localStorage.setItem('tema', 'masculino');
+        } else {
+            document.documentElement.removeAttribute('data-theme');
+            button.innerHTML = "💅 Feminino";
+            localStorage.setItem('tema', 'feminino');
+        }
+    }
+});
+</script>
+
+</body>
+</html>
