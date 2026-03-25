@@ -14,6 +14,7 @@ use App\Http\Controllers\CadastroController;
 use App\Http\Controllers\AgendamentosController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\CobrancaController;
 
 // NOVO: Importação do controlador responsável pela segurança das contas.
 use App\Http\Controllers\Auth\ForgotPasswordController;
@@ -102,7 +103,7 @@ Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'showRes
 Route::post('/reset-password', [ForgotPasswordController::class, 'reset'])->name('password.update');
 
 /* SINTAXE: Route::get('/caminho', [Classe::class, 'metodo'])->name('nome.da.rota');
-SEMÂNTICA: 
+SEMÂNTICA:
 1. Route::get(): Define que esta rota só responde a requisições do tipo GET (quando acessamos um link ou digitamos a URL).
 2. '/exportar-agendamentos': É o endereço (URI) que aparecerá na barra do navegador.
 3. [AgendamentosController::class, 'exportarExcel']: Indica ao Laravel que, quando esta URL for acessada, ele deve "chamar" o arquivo AgendamentosController e executar a função 'exportarExcel' lá dentro.
