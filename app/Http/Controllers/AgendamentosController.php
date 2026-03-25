@@ -230,6 +230,44 @@ class AgendamentosController extends Controller
         */
         return redirect()->route('agendamentos.index')->with('success', 'Agendamento removido!');
     }
+    public function exportarExcel()
+    {
+        $agendamentos = Agendamento::with(['cliente', 'servico', 'profissional'])->get();
+        $fileName = 'agendamentos_salao.csv';
+
+        $headers = [
+            "Content-type"        => "text/csv; charset=UTF-8",
+            "Content-Disposition" => "attachment; filename=$fileName",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        ];
+
+        $columns = ['ID', 'Cliente', 'Serviço', 'Profissional', 'Data', 'Hora', 'Status', 'Comissão'];
+
+        $callback = function() use($agendamentos, $columns) {
+            $file = fopen('php://output', 'w');
+            // Adiciona o BOM para o Excel entender acentos em Português
+            fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
+            fputcsv($file, $columns, ';');
+
+            foreach ($agendamentos as $agendamento) {
+                fputcsv($file, [
+                    $agendamento->id,
+                    $agendamento->cliente->nome,
+                    $agendamento->servico->nome,
+                    $agendamento->profissional->nome,
+                    $agendamento->data,
+                    $agendamento->hora,
+                    $agendamento->status,
+                    $agendamento->valor_comissao_pago
+                ], ';');
+            }
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
     /*
     SINTAXE: public function concluir(Agendamento $agendamento)
     SEMÂNTICA: Este método é um "Custom Action" (Ação Personalizada). 

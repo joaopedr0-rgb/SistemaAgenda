@@ -15,6 +15,9 @@ use App\Http\Controllers\AgendamentosController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\DashboardController;
 
+// NOVO: Importação do controlador responsável pela segurança das contas.
+use App\Http\Controllers\Auth\ForgotPasswordController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -78,3 +81,24 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('profissionais', ProfissionaisController::class)->parameters(['profissionais' => 'profissional']);
     Route::resource('usuarios', UsuarioController::class)->parameters(['usuarios' => 'usuarios']);
 });
+
+//ROTAS NOVAS PARA A RECUPERAÇÃO DE SENHA:
+/*
+ * SINTAXE: Route::get(...) / Route::post(...) para Password Reset
+ * SEMÂNTICA: Este conjunto de rotas é o "plano de emergência" do sistema.
+ * Elas usam o sistema de 'tokens' temporários para garantir que apenas o dono do e-mail 
+ * consiga redefinir a senha, mantendo o banco de dados seguro e íntegro.
+ */
+// 1. Exibe o formulário onde o usuário solicita a troca (digita o e-mail)
+Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+
+// 2. Recebe o e-mail e dispara o link de recuperação via Gmail (SMTP)
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+
+// 3. Rota que o usuário acessa ao clicar no link do e-mail (O {token} é o validador)
+Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'showResetForm'])->name('password.reset');
+
+// 4. Processa a nova senha digitada e atualiza a tabela de usuários oficialmente
+Route::post('/reset-password', [ForgotPasswordController::class, 'reset'])->name('password.update');
+
+Route::get('/agendamentos/exportar', [AgendamentosController::class, 'exportarExcel'])->name('agendamentos.exportar');
