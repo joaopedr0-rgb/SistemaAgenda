@@ -14,7 +14,7 @@
         :root {
             --bg-body: #fdfdfd;
             --nav-bg: #121212;
-            --accent: #007bff; 
+            --accent: #007bff; /* Azul forte */
             --text-main: #1a1a1a;
             --card-shadow: rgba(0, 0, 0, 0.08);
         }
@@ -22,60 +22,57 @@
         [data-theme="summer"] {
             --bg-body: #fffafa;
             --nav-bg: #432837;
-            --accent: #ff758c; 
+            --accent: #ff758c; /* Rosa forte */
             --text-main: #2d1e26;
         }
 
         html, body { height: 100%; margin: 0; }
         body { display: flex; flex-direction: column; background-color: var(--bg-body); color: var(--text-main); font-family: 'Inter', sans-serif; transition: 0.3s; }
 
-        /* NAVBAR ESTILO PÍLULA */
+        /* NAVBAR PREMIUM */
         .navbar-custom {
             background-color: var(--nav-bg) !important;
             margin: 20px auto;
             width: 95%;
             border-radius: 60px;
-            padding: 10px 35px;
+            padding: 10px 25px;
             box-shadow: 0 10px 30px var(--card-shadow);
             border: none;
         }
 
-        .navbar-brand { font-weight: 800; color: #ffffff !important; letter-spacing: -0.5px; }
+        .navbar-brand { font-weight: 800; color: #ffffff !important; }
         .navbar-brand span { color: var(--accent); }
 
         .nav-link {
             color: rgba(255, 255, 255, 0.8) !important;
             font-weight: 600;
             font-size: 0.85rem;
-            margin: 0 5px;
             padding: 8px 18px !important;
             border-radius: 40px;
-            transition: 0.2s;
         }
 
         .nav-link:hover { color: #ffffff !important; background: rgba(255, 255, 255, 0.1); }
 
-        main { flex: 1; padding-top: 20px; padding-bottom: 50px; }
-
-        /* BOTOES GERAIS */
-        .btn-primary, .btn-submit, .btn-novo {
+        /* BOTAO DOS FORMULARIOS (CORRIGIDO) */
+        .btn-primary, .btn-submit, button[type="submit"]:not(.btn-light) {
             background-color: var(--accent) !important;
             border: none !important;
             color: #ffffff !important;
             border-radius: 50px !important;
-            font-weight: 700;
-            padding: 12px 28px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            font-weight: 700 !important;
+            padding: 12px 28px !important;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
         }
+
+        main { flex: 1; padding: 20px 0; }
 
         footer {
             background-color: var(--nav-bg);
             color: #ffffff;
-            padding: 20px 0;
+            padding: 15px 0;
             text-align: center;
-            font-weight: 500;
             font-size: 0.8rem;
-            margin-top: auto;
             border-top: 4px solid var(--accent);
         }
 
@@ -93,54 +90,50 @@
 
 <body>
 
-    {{-- MENU DINÂMICO --}}
-    @if (!Route::is('login') && !Route::is('cadastro') && !Route::is('password.request') && !Route::is('password.reset'))
-        <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="/">SCHEDULE<span>ONLINE</span></a>
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">SCHEDULE<span>ONLINE</span></a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    @auth
+                        {{-- Se for admin ou se o campo nivel estiver vazio, mostra TUDO --}}
+                        @if(Auth::user()->nivel == 'admin' || empty(Auth::user()->nivel))
+                            <li class="nav-item"><a class="nav-link" href="{{ route('dashboard.index') }}">Início</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('profissionais.index') }}">Profissionais</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('clientes.index') }}">Clientes</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('servicos.index') }}">Serviços</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('agendamentos.index') }}">Agendamentos</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('usuarios.index') }}">Usuários</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('cobrancas.index') }}">Cobrança</a></li>
+                        @else
+                            {{-- Caso contrário, mostra visão de funcionário --}}
+                            <li class="nav-item"><a class="nav-link" href="{{ route('clientes.index') }}">Clientes</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('agendamentos.index') }}">Agendamentos</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('servicos.index') }}">Serviços</a></li>
+                        @endif
+                    @endauth
+                </ul>
                 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav mx-auto">
-                        
-                        @auth
-                            {{-- LOGICA PARA ADMIN (Ou se o nível estiver nulo no banco) --}}
-                            @if(Auth::user()->nivel == 'admin' || is_null(Auth::user()->nivel))
-                                <li class="nav-item"><a class="nav-link" href="{{ route('dashboard.index') }}">Início</a></li>
-                                <li class="nav-item"><a class="nav-link" href="{{ route('profissionais.index') }}">Profissionais</a></li>
-                                <li class="nav-item"><a class="nav-link" href="{{ route('clientes.index') }}">Clientes</a></li>
-                                <li class="nav-item"><a class="nav-link" href="{{ route('servicos.index') }}">Serviços</a></li>
-                                <li class="nav-item"><a class="nav-link" href="{{ route('agendamentos.index') }}">Agendamentos</a></li>
-                                <li class="nav-item"><a class="nav-link" href="{{ route('usuarios.index') }}">Usuários</a></li>
-                                <li class="nav-item"><a class="nav-link" href="{{ route('cobrancas.index') }}">Cobrança</a></li>
-                            
-                            {{-- LOGICA PARA FUNCIONARIO --}}
-                            @elseif(Auth::user()->nivel == 'funcionario')
-                                <li class="nav-item"><a class="nav-link" href="{{ route('clientes.index') }}">Clientes</a></li>
-                                <li class="nav-item"><a class="nav-link" href="{{ route('agendamentos.index') }}">Agendamentos</a></li>
-                                <li class="nav-item"><a class="nav-link" href="{{ route('servicos.index') }}">Serviços</a></li>
-                            @endif
-                        @endauth
-
-                    </ul>
+                <div class="d-flex align-items-center">
+                    <button class="theme-switch me-3" onclick="toggleTheme()">Estilo</button>
                     
-                    <div class="d-flex align-items-center">
-                        <button class="theme-switch me-3" onclick="toggleTheme()">Estilo</button>
-                        
-                        @auth
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <button type="submit" class="btn btn-light btn-sm rounded-pill fw-bold px-3" style="background: white !important; color: black !important; border:none;">Sair</button>
-                            </form>
-                        @endauth
-                    </div>
+                    @auth
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="btn btn-light btn-sm rounded-pill fw-bold px-3">Sair</button>
+                        </form>
+                    @else
+                        <a href="{{ route('login') }}" class="btn btn-light btn-sm rounded-pill fw-bold px-3">Entrar</a>
+                    @endauth
                 </div>
             </div>
-        </nav>
-    @endif
+        </div>
+    </nav>
 
     <main class="container">
         @yield('content')
@@ -152,7 +145,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Tema
         function toggleTheme() {
             const body = document.documentElement;
             const target = body.getAttribute('data-theme') === 'summer' ? 'default' : 'summer';
@@ -163,18 +155,13 @@
             document.documentElement.setAttribute('data-theme', 'summer');
         }
 
-        // ViaCEP
+        // Lógica ViaCEP
         document.addEventListener('DOMContentLoaded', function() {
             const cepInput = document.getElementById('cep');
             if(cepInput) {
                 cepInput.addEventListener('blur', function() {
                     let cep = this.value.replace(/\D/g, '');
                     if (cep.length === 8) {
-                        document.getElementById('logradouro').value = "...";
-                        document.getElementById('bairro').value = "...";
-                        document.getElementById('cidade').value = "...";
-                        document.getElementById('estado').value = "...";
-
                         fetch(`https://viacep.com.br/ws/${cep}/json/`)
                             .then(res => res.json())
                             .then(data => {
