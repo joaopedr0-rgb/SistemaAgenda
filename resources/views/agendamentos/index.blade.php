@@ -56,9 +56,7 @@
             </table>
         </div>
         <div>
-            <a href="{{ route('agendamentos.exportar') }}" class="btn btn-success">
-                📊 Exportar para Excel
-            </a>
+            <a href="/exportar-agendamentos" class="btn btn-success">📊 Exportar Relatório</a>
         </div>
     </div>
 </div>
