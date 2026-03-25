@@ -21,6 +21,7 @@ use Laravel\Sanctum\HasApiTokens;
  */
 class User extends Authenticatable
 {
+    
     /*
      * SINTAXE: use Trait1, Trait2, Trait3;
      * SEMÂNTICA: 
@@ -83,4 +84,5 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    use Notifiable; // <--- Isso permite que o Laravel envie o e-mail de reset de senha para este modelo.
 }

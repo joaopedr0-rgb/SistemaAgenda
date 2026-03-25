@@ -177,7 +177,7 @@
         {{-- Esqueceu a Senha --}}
         <div class="text-center mt-4">
             <p class="text-muted small">
-                Esqueceu sua senha? <a href="#" class="forgot-link">Clique aqui</a>
+                Esqueceu sua senha? <a href="{{ route('password.request') }}" class="forgot-link">Clique aqui</a>
             </p>
         </div>
 
