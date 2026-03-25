@@ -11,6 +11,7 @@ SINTAXE: Importação da classe base Request.
 SEMÂNTICA: Permite capturar dados de entrada (filtros, formulários) caso você queira expandir a busca financeira no futuro.
 */
 use Illuminate\Http\Request;
+use App\Models\Agendamento; // Importação recomendada para facilitar a leitura
 
 class CobrancaController extends Controller
 {
@@ -19,38 +20,38 @@ class CobrancaController extends Controller
     */
     public function index()
     {
-        /*
-        SINTAXE: Model::where('coluna', 'valor')->with([...])->get();
-        SEMÂNTICA: Filtro de Negócio. Buscamos apenas os agendamentos com status 'concluido', pois um serviço "pendente" ainda não gera faturamento real. 
-        O 'with' carrega o Serviço e o Profissional de uma vez, evitando consultas repetitivas ao banco (Problema N+1).
+        /* SINTAXE: Model::with([...])->get();
+        SEMÂNTICA: Carregamento Antecipado (Eager Loading). Buscamos TODOS os agendamentos trazendo junto os nomes dos clientes e serviços para popular a tabela da View.
         */
-        $agendamentos = \App\Models\Agendamento::where('status', 'concluido')->with(['servico', 'profissional'])->get();
+        $agendamentos = Agendamento::with(['cliente', 'servico'])->get();
 
-       /*
-        SINTAXE: '$agendamentos->sum(callback)'.
-        SEMÂNTICA: Cálculo do Faturamento Bruto. O método sum() percorre a coleção de agendamentos e soma o preço de cada serviço. 
-        O operador '?? 0' é uma segurança: se um serviço foi removido do banco, o sistema assume 0 e não trava o cálculo.
+        /* SINTAXE: $colecao->where('coluna', 'valor')->sum(callback);
+        SEMÂNTICA: Cálculo do TOTAL RECEBIDO. Filtra apenas os serviços com status 'concluido' e soma seus preços. Representa o dinheiro que já está no caixa.
         */
-        $faturamentoTotal = $agendamentos->sum(function($a) {
-            return $a->servico->preco ?? 0;
-        });
+        $totalRecebido = $agendamentos->where('status', 'concluido')->sum(fn($a) => $a->servico->preco ?? 0);
 
         /*
-        SINTAXE: '$agendamentos->sum('coluna')'.
-        SEMÂNTICA: Soma das Comissões. Aqui somamos diretamente a coluna 'valor_comissao_pago' que você salvou no banco quando o serviço foi finalizado. Isso representa o "custo" de mão de obra do salão.
+        /*
+        SINTAXE: Filtro duplo (status e data >= hoje).
+        SEMÂNTICA: Cálculo do TOTAL PENDENTE. Identifica serviços que ainda não aconteceram ou estão agendados para hoje. É o dinheiro "garantido" que ainda vai entrar no caixa.
         */
-        $totalComissoes = $agendamentos->sum('valor_comissao_pago');
+        $totalPendente = $agendamentos->where('status', 'pendente')
+                                        ->where('data', '>=', date('Y-m-d'))
+                                        ->sum(fn($a) => $a->servico->preco ?? 0);
+        
+                                        /*
+        /*
+        SINTAXE: Filtro duplo (status e data < hoje).
+        SEMÂNTICA: Cálculo do TOTAL EM ATRASO. Essa é a inteligência do sistema: se um serviço ficou como 'pendente' e a data já passou, ele entra automaticamente nesta soma. Ajuda o dono do salão a identificar clientes inadimplentes.
+        */
+        $totalAtrasado = $agendamentos->where('status', 'pendente')
+                                        ->where('data', '<', date('Y-m-d'))
+                                        ->sum(fn($a) => $a->servico->preco ?? 0);
 
         /*
-        SINTAXE: Subtração simples de variáveis.
-        SEMÂNTICA: Lucro Líquido. Representa o que sobra para o salão após o pagamento das porcentagens dos profissionais (Faturamento - Comissões).
+        SINTAXE: 'return view(caminho, compact(...))'.
+        SEMÂNTICA: Envia a lista completa de agendamentos e os 3 novos totais calculados para a View. Agora, os Cards coloridos que o seu colega criou exibirão valores reais vindos do banco.
         */
-        $lucroSalao = $faturamentoTotal - $totalComissoes;
-
-        /*
-        SINTAXE: 'return view(caminho, compact)'.
-        SEMÂNTICA: Renderiza a tela 'resources/views/cobrancas/index.blade.php' e injeta nela os quatro resultados calculados para que o HTML possa exibi-los nos "Cards" coloridos.
-        */
-        return view('cobrancas.index', compact('agendamentos', 'faturamentoTotal', 'totalComissoes', 'lucroSalao'));
+        return view('cobrancas.index', compact('agendamentos', 'totalRecebido', 'totalPendente', 'totalAtrasado'));
     }
 }
