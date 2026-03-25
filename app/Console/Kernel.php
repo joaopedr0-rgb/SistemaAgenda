@@ -12,7 +12,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
+        // Agendando o comando de enviar lembrete para rodar todo dia às 08:00
+        $schedule->command('enviar:lembretes')->everyMinute();
     }
 
     /**

@@ -55,6 +55,11 @@
                 </tbody>
             </table>
         </div>
+        <div>
+            <a href="{{ route('agendamentos.exportar') }}" class="btn btn-success">
+                📊 Exportar para Excel
+            </a>
+        </div>
     </div>
 </div>
 @endsection
