@@ -1,130 +1,107 @@
 @extends('layouts.app')
 
 @section('content')
-<style>
-    @keyframes gradientAnimation {
-        0% { background-position: 20% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 20% 50%; }
-    }
-    /* Fundo da Dashboard acompanhando o tema */
-    body {
-         background: var(--bg-gradient) !important;
-        background-size: 400% 400% !important;
-        animation: gradientAnimation 15s ease infinite !important;
-        background-attachment: fixed !important;
-        min-height: 100vh;
-        transition: background 0.5s ease;
-    }
+<div class="row mb-5 text-center">
+    <div class="col-12">
+        <h1 class="fw-bold" style="color: var(--nav-bg)">Painel de Gestão</h1>
+        <p class="text-muted">Acompanhe seus agendamentos e serviços</p>
+    </div>
+</div>
 
-    /* Título da Página */
-    .page-title {
-        color: white;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        margin-bottom: 30px;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-    }
-
-    /* Cards de Estatísticas */
-    .stat-card {
-        border: none;
-        border-radius: 20px;
-        transition: all 0.3s ease;
-        background: rgba(255, 255, 255, 0.95);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        backdrop-filter: blur(5px);
-    }
-
-    .stat-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-    }
-
-    .stat-icon {
-        font-size: 2.5rem;
-        margin-bottom: 10px;
-        background: linear-gradient(135deg, #3A0256 0%, #d81b60 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-
-    .stat-value {
-        font-size: 2rem;
-        font-weight: 900;
-        color: #333;
-    }
-
-    .stat-label {
-        color: #666;
-        font-weight: 600;
-        text-transform: uppercase;
-        font-size: 0.8rem;
-    }
-
-    /* Botões de Ação Rápida */
-    .btn-quick-action {
-        border-radius: 15px;
-        padding: 15px;
-        font-weight: 700;
-        text-transform: uppercase;
-        transition: all 0.3s;
-        border: 2px solid white;
-        background: rgba(255, 255, 255, 0.1);
-        color: white;
-    }
-
-    .btn-quick-action:hover {
-        background: white;
-        color: #3A0256;
-    }
-</style>
-
-<div class="container pb-5">
-    <div class="row">
-        <div class="col-12 text-center">
-            <h1 class="page-title">Bem-vindo ao Dashboard</h1>
-            <p class="text-white opacity-75 mb-5">Visão geral do seu sistema de agendamentos</p>
+{{-- Cards de Resumo --}}
+<div class="row mb-5">
+    <div class="col-md-3 mb-4">
+        <div class="card p-3 shadow-sm border-0 text-center">
+            <i class="fas fa-users fa-2x mb-2" style="color: var(--nav-bg)"></i>
+            <h3 class="fw-bold mb-0">{{ $clientesCount ?? '0' }}</h3>
+            <small class="text-muted fw-bold">CLIENTES</small>
         </div>
     </div>
-
-    {{-- Cards de Resumo --}}
-    <div class="row text-center">
-        {{-- Exemplo de Card Funcional --}}
-        <div class="col-md-3 mb-4">
-            <div class="card stat-card p-4">
-                <i class="fas fa-user-md stat-icon"></i>
-                <div class="stat-value">{{ $profissionaisCount ?? '0' }}</div>
-                <div class="stat-label">Profissionais</div>
-            </div>
+    <div class="col-md-3 mb-4">
+        <div class="card p-3 shadow-sm border-0 text-center">
+            <i class="fas fa-calendar-check fa-2x mb-2" style="color: var(--nav-bg)"></i>
+            <h3 class="fw-bold mb-0">{{ $agendamentosCount ?? '0' }}</h3>
+            <small class="text-muted fw-bold">AGENDAMENTOS</small>
         </div>
-
-        <div class="col-md-3 mb-4">
-            <div class="card stat-card p-4">
-                <i class="fas fa-users stat-icon"></i>
-                <div class="stat-value">{{ $clientesCount ?? '0' }}</div>
-                <div class="stat-label">Clientes</div>
-            </div>
+    </div>
+    <div class="col-md-3 mb-4">
+        <div class="card p-3 shadow-sm border-0 text-center">
+            <i class="fas fa-cut fa-2x mb-2" style="color: var(--nav-bg)"></i>
+            <h3 class="fw-bold mb-0">{{ $servicosCount ?? '0' }}</h3>
+            <small class="text-muted fw-bold">SERVIÇOS</small>
         </div>
-
-        <div class="col-md-3 mb-4">
-            <div class="card stat-card p-4">
-                <i class="fas fa-concierge-bell stat-icon"></i>
-                <div class="stat-value">{{ $servicosCount ?? '0' }}</div>
-                <div class="stat-label">Serviços</div>
-            </div>
+    </div>
+    <div class="col-md-3 mb-4">
+        <div class="card p-3 shadow-sm border-0 text-center">
+            <i class="fas fa-user-tie fa-2x mb-2" style="color: var(--nav-bg)"></i>
+            <h3 class="fw-bold mb-0">{{ $profissionaisCount ?? '0' }}</h3>
+            <small class="text-muted fw-bold">EQUIPE</small>
         </div>
+    </div>
+</div>
 
-        <div class="col-md-3 mb-4">
-            <div class="card stat-card p-4">
-                <i class="fas fa-calendar-check stat-icon"></i>
-                <div class="stat-value">{{ $agendamentosCount ?? '0' }}</div>
-                <div class="stat-label">Agendamentos</div>
+{{-- Gráficos de Pizza --}}
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-header text-center">Procura por Serviço</div>
+            <div class="card-body d-flex justify-content-center">
+                <div style="width: 280px;"><canvas id="chartServicos"></canvas></div>
             </div>
         </div>
     </div>
+    <div class="col-md-6 mb-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-header text-center">Status dos Agendamentos</div>
+            <div class="card-body d-flex justify-content-center">
+                <div style="width: 280px;"><canvas id="chartStatus"></canvas></div>
+            </div>
+        </div>
+    </div>
+</div>
 
-    {{-- Ações Rápidas --}}
-   
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    let chart1, chart2;
+
+    function renderCharts() {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'summer';
+        
+        // Cores Rose vs Azul Marinho
+        const colors = isDark 
+            ? ['#1B3A57', '#0D47A1', '#64FFDA', '#112240'] 
+            : ['#722F37', '#A64452', '#E7C1B1', '#C19A6B'];
+
+        const labelColor = isDark ? '#E6F1FF' : '#333';
+
+        if (chart1) chart1.destroy();
+        if (chart2) chart2.destroy();
+
+        chart1 = new Chart(document.getElementById('chartServicos'), {
+            type: 'pie',
+            data: {
+                labels: ['Cabelo', 'Barba', 'Manicure', 'Pedicure'],
+                datasets: [{ data: [35, 25, 25, 15], backgroundColor: colors, borderWidth: 0 }]
+            },
+            options: { plugins: { legend: { labels: { color: labelColor } } } }
+        });
+
+        chart2 = new Chart(document.getElementById('chartStatus'), {
+            type: 'pie',
+            data: {
+                labels: ['Realizados', 'Pendentes', 'Cancelados'],
+                datasets: [{ data: [60, 30, 10], backgroundColor: ['#28a745', '#ffc107', '#dc3545'], borderWidth: 0 }]
+            },
+            options: { plugins: { legend: { labels: { color: labelColor } } } }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', renderCharts);
+    window.addEventListener('theme-changed', renderCharts);
+    
+    // Pequeno ajuste para garantir que o gráfico mude com o tema
+    document.getElementById('theme-toggler').addEventListener('click', () => {
+        setTimeout(renderCharts, 100);
+    });
+</script>
 @endsection

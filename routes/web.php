@@ -78,3 +78,14 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('profissionais', ProfissionaisController::class)->parameters(['profissionais' => 'profissional']);
     Route::resource('usuarios', UsuarioController::class)->parameters(['usuarios' => 'usuarios']);
 });
+
+Route::middleware(['auth'])->group(function () {
+    // ... suas rotas de clientes, servicos e agendamentos ...
+    
+    // NOVA ROTA PARA OS GRÁFICOS REAIS
+    Route::get('/api/dashboard-stats', [DashboardController::class, 'getStats'])->name('api.stats');
+    
+    Route::resource('clientes', ClientesController::class)->parameters(['clientes' => 'cliente']);
+    Route::resource('servicos', ServicosController::class)->parameters(['servicos' => 'servico']);
+    Route::resource('agendamentos', AgendamentosController::class)->parameters(['agendamentos' => 'agendamento']);
+});
