@@ -101,4 +101,14 @@ Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'showRes
 // 4. Processa a nova senha digitada e atualiza a tabela de usuários oficialmente
 Route::post('/reset-password', [ForgotPasswordController::class, 'reset'])->name('password.update');
 
-Route::get('/agendamentos/exportar', [AgendamentosController::class, 'exportarExcel'])->name('agendamentos.exportar');
+/* SINTAXE: Route::get('/caminho', [Classe::class, 'metodo'])->name('nome.da.rota');
+SEMÂNTICA: 
+1. Route::get(): Define que esta rota só responde a requisições do tipo GET (quando acessamos um link ou digitamos a URL).
+2. '/exportar-agendamentos': É o endereço (URI) que aparecerá na barra do navegador.
+3. [AgendamentosController::class, 'exportarExcel']: Indica ao Laravel que, quando esta URL for acessada, ele deve "chamar" o arquivo AgendamentosController e executar a função 'exportarExcel' lá dentro.
+4. ->name('agendamentos.exportar'): Atribui um "apelido" à rota. Isso é uma boa prática porque, se você mudar a URL de '/exportar-agendamentos' para '/baixar-relatorio' no futuro, você não precisará mudar o código em nenhum botão (Blade), pois o nome da rota continuará o mesmo.
+*/
+Route::get('/exportar-agendamentos', [AgendamentosController::class, 'exportarExcel'])->name('agendamentos.exportar');
+
+/* SEMÂNTICA: Rota para a área administrativa de finanças/cobrança. */
+Route::get('/financeiro', [CobrancaController::class, 'index'])->name('cobrancas.index');
