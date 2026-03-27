@@ -39,7 +39,7 @@ return new class extends Migration
             
             /*
              * SINTAXE: $table->decimal('preco', 8, 2);
-             * SEMÂNTICA: 🏆 EXCELENTE ESCOLHA TÉCNICA! O tipo 'decimal' garante precisão matemática para valores monetários.
+             
              * O '8' significa que o número pode ter até 8 dígitos no total.
              * O '2' significa que 2 desses dígitos são para as casas decimais (centavos). 
              * Exemplo: Pode armazenar até R$ 999.999,99.
