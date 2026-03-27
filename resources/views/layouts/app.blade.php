@@ -14,7 +14,8 @@
         :root {
             --bg-body: #fdfdfd;
             --nav-bg: #121212;
-            --accent: #007bff; /* Azul forte */
+            --accent: #007bff;
+            /* Azul forte */
             --text-main: #1a1a1a;
             --card-shadow: rgba(0, 0, 0, 0.08);
         }
@@ -22,12 +23,25 @@
         [data-theme="summer"] {
             --bg-body: #fffafa;
             --nav-bg: #432837;
-            --accent: #ff758c; /* Rosa forte */
+            --accent: #ff758c;
+            /* Rosa forte */
             --text-main: #2d1e26;
         }
 
-        html, body { height: 100%; margin: 0; }
-        body { display: flex; flex-direction: column; background-color: var(--bg-body); color: var(--text-main); font-family: 'Inter', sans-serif; transition: 0.3s; }
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            transition: 0.3s;
+        }
 
         /* NAVBAR PREMIUM */
         .navbar-custom {
@@ -40,8 +54,14 @@
             border: none;
         }
 
-        .navbar-brand { font-weight: 800; color: #ffffff !important; }
-        .navbar-brand span { color: var(--accent); }
+        .navbar-brand {
+            font-weight: 800;
+            color: #ffffff !important;
+        }
+
+        .navbar-brand span {
+            color: var(--accent);
+        }
 
         .nav-link {
             color: rgba(255, 255, 255, 0.8) !important;
@@ -51,10 +71,15 @@
             border-radius: 40px;
         }
 
-        .nav-link:hover { color: #ffffff !important; background: rgba(255, 255, 255, 0.1); }
+        .nav-link:hover {
+            color: #ffffff !important;
+            background: rgba(255, 255, 255, 0.1);
+        }
 
         /* BOTAO DOS FORMULARIOS (CORRIGIDO) */
-        .btn-primary, .btn-submit, button[type="submit"]:not(.btn-light) {
+        .btn-primary,
+        .btn-submit,
+        button[type="submit"]:not(.btn-light) {
             background-color: var(--accent) !important;
             border: none !important;
             color: #ffffff !important;
@@ -62,10 +87,13 @@
             font-weight: 700 !important;
             padding: 12px 28px !important;
             display: inline-block;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
         }
 
-        main { flex: 1; padding: 20px 0; }
+        main {
+            flex: 1;
+            padding: 20px 0;
+        }
 
         footer {
             background-color: var(--nav-bg);
@@ -78,7 +106,7 @@
 
         .theme-switch {
             background: transparent;
-            border: 1.5px solid rgba(255,255,255,0.3);
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
             color: #fff;
             border-radius: 50px;
             padding: 5px 15px;
@@ -93,45 +121,49 @@
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
         <div class="container-fluid">
             <a class="navbar-brand" href="/">SCHEDULE<span>ONLINE</span></a>
-            
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            @if(!Route::is('login') && !Route::is('cadastro'))
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mx-auto">
+                        @auth
+                            {{-- Se for admin ou se o campo nivel estiver vazio, mostra TUDO --}}
+                            @if(Auth::user()->nivel == 'admin' || empty(Auth::user()->nivel))
+                                <li class="nav-item"><a class="nav-link" href="{{ route('dashboard.index') }}">Início</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{{ route('profissionais.index') }}">Profissionais</a>
+                                </li>
+                                <li class="nav-item"><a class="nav-link" href="{{ route('clientes.index') }}">Clientes</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{{ route('servicos.index') }}">Serviços</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{{ route('agendamentos.index') }}">Agendamentos</a>
+                                </li>
+                                <li class="nav-item"><a class="nav-link" href="{{ route('usuarios.index') }}">Usuários</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{{ route('cobrancas.index') }}">Cobrança</a></li>
+                            @else
+                                {{-- Caso contrário, mostra visão de funcionário --}}
+                                <li class="nav-item"><a class="nav-link" href="{{ route('clientes.index') }}">Clientes</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{{ route('agendamentos.index') }}">Agendamentos</a>
+                                </li>
+                                <li class="nav-item"><a class="nav-link" href="{{ route('servicos.index') }}">Serviços</a></li>
+                            @endif
+                        @endauth
+                    </ul>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav mx-auto">
-                    @auth
-                        {{-- Se for admin ou se o campo nivel estiver vazio, mostra TUDO --}}
-                        @if(Auth::user()->nivel == 'admin' || empty(Auth::user()->nivel))
-                            <li class="nav-item"><a class="nav-link" href="{{ route('dashboard.index') }}">Início</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ route('profissionais.index') }}">Profissionais</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ route('clientes.index') }}">Clientes</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ route('servicos.index') }}">Serviços</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ route('agendamentos.index') }}">Agendamentos</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ route('usuarios.index') }}">Usuários</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ route('cobrancas.index') }}">Cobrança</a></li>
+                    <div class="d-flex align-items-center">
+                        <button class="theme-switch me-3" onclick="toggleTheme()">Estilo</button>
+
+                        @auth
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit" class="btn btn-light btn-sm rounded-pill fw-bold px-3">Sair</button>
+                            </form>
                         @else
-                            {{-- Caso contrário, mostra visão de funcionário --}}
-                            <li class="nav-item"><a class="nav-link" href="{{ route('clientes.index') }}">Clientes</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ route('agendamentos.index') }}">Agendamentos</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ route('servicos.index') }}">Serviços</a></li>
-                        @endif
-                    @endauth
-                </ul>
-                
-                <div class="d-flex align-items-center">
-                    <button class="theme-switch me-3" onclick="toggleTheme()">Estilo</button>
-                    
-                    @auth
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button type="submit" class="btn btn-light btn-sm rounded-pill fw-bold px-3">Sair</button>
-                        </form>
-                    @else
-                        <a href="{{ route('login') }}" class="btn btn-light btn-sm rounded-pill fw-bold px-3">Entrar</a>
-                    @endauth
+                            <a href="{{ route('login') }}" class="btn btn-light btn-sm rounded-pill fw-bold px-3">Entrar</a>
+                        @endauth
+                    </div>
                 </div>
-            </div>
+            @endif
         </div>
     </nav>
 
@@ -156,10 +188,10 @@
         }
 
         // Lógica ViaCEP
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const cepInput = document.getElementById('cep');
-            if(cepInput) {
-                cepInput.addEventListener('blur', function() {
+            if (cepInput) {
+                cepInput.addEventListener('blur', function () {
                     let cep = this.value.replace(/\D/g, '');
                     if (cep.length === 8) {
                         fetch(`https://viacep.com.br/ws/${cep}/json/`)
@@ -178,4 +210,5 @@
         });
     </script>
 </body>
+
 </html>
