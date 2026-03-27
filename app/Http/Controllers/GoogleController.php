@@ -33,7 +33,7 @@ class GoogleController extends Controller
         $token = $client->fetchAccessTokenWithAuthCode($request->code);
         $client->setAccessToken($token);
 
-        // 🔥 SALVA O TOKEN
+        //  SALVA O TOKEN
         session(['google_token' => $token]);
 
         return "Google conectado com sucesso!";
