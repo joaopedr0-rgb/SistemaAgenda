@@ -15,6 +15,31 @@ use Google_Service_Calendar_Event;
 
 class AgendamentosController extends Controller
 {
+    public function json()
+    {
+        $eventos = Agendamento::with(['cliente', 'servico', 'profissional'])->get()->map(function ($agendamento) {
+            return [
+                'id' => $agendamento->id,
+                'title' => $agendamento->cliente->nome . ' - ' . $agendamento->servico->nome,
+                'start' => $agendamento->data . 'T' . $agendamento->hora, // Formato ISO8601: 2023-10-25T14:30:00
+                'color' => $agendamento->status == 'confirmado' ? 'green' : 'blue', // Exemplo de lógica visual
+                
+                
+            ];
+        });
+
+        return response()->json($eventos);
+    }
+    private function corPorTipo(string $tipo): string
+    {
+        return match ($tipo) {
+            'consulta' => '#378ADD',
+            'ativo' => '#639922',
+            'atrasado' => '#BA7517',
+            'cancelado' => '#e73a00',
+            default => '#888780',
+        };
+    }
     public function index()
     {
         $agendamentos = Agendamento::all();
@@ -37,12 +62,12 @@ class AgendamentosController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'cliente_id'      => 'required|exists:clientes,id',
+            'cliente_id' => 'required|exists:clientes,id',
             'profissional_id' => 'required|exists:profissionais,id',
-            'servico_id'      => 'required|exists:servicos,id',
-            'data'            => 'required|date',
-            'hora'            => 'required|date_format:H:i',
-            'status'          => 'required',
+            'servico_id' => 'required|exists:servicos,id',
+            'data' => 'required|date',
+            'hora' => 'required|date_format:H:i',
+            'status' => 'required',
             'valor_comissao_pago' => 'required'
         ]);
 
@@ -96,11 +121,11 @@ class AgendamentosController extends Controller
     public function update(Request $request, Agendamento $agendamento)
     {
         $validated = $request->validate([
-            'cliente_id'      => 'required|exists:clientes,id',
+            'cliente_id' => 'required|exists:clientes,id',
             'profissional_id' => 'required|exists:profissionais,id',
-            'servico_id'      => 'required|exists:servicos,id',
-            'data'            => 'required|date',
-            'hora'            => 'required',
+            'servico_id' => 'required|exists:servicos,id',
+            'data' => 'required|date',
+            'hora' => 'required',
         ]);
 
         $agendamento->update($validated);
@@ -111,7 +136,7 @@ class AgendamentosController extends Controller
     public function destroy(Agendamento $agendamento)
     {
         $agendamento->delete();
-        
+
         return redirect()->route('agendamentos.index')->with('success', 'Agendamento removido!');
     }
 
@@ -121,18 +146,18 @@ class AgendamentosController extends Controller
         $fileName = 'agendamentos_salao.csv';
 
         $headers = [
-            "Content-type"        => "text/csv; charset=UTF-8",
+            "Content-type" => "text/csv; charset=UTF-8",
             "Content-Disposition" => "attachment; filename=$fileName",
-            "Pragma"              => "no-cache",
-            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
-            "Expires"             => "0"
+            "Pragma" => "no-cache",
+            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+            "Expires" => "0"
         ];
 
         $columns = ['ID', 'Cliente', 'Serviço', 'Profissional', 'Data', 'Hora', 'Status', 'Comissão'];
 
-        $callback = function() use($agendamentos, $columns) {
+        $callback = function () use ($agendamentos, $columns) {
             $file = fopen('php://output', 'w');
-            fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
+            fprintf($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
             fputcsv($file, $columns, ';');
 
             foreach ($agendamentos as $agendamento) {

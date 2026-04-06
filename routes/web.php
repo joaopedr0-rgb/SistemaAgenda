@@ -30,6 +30,8 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 Route::get('/', function () {
     return redirect()->route('login');
 });
+Route::get('/agendamentos/json', [AgendamentosController::class, 'json'])
+     ->name('agendamentos.json');
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
 // Aqui, Bernardo, é toda a parte de login e cadastro.
