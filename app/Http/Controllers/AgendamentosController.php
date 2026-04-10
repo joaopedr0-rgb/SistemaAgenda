@@ -42,6 +42,11 @@ class AgendamentosController extends Controller
     }
     public function index()
     {
+        Agendamento::where('status', 'pendente')
+        ->where('scheduled_at', '<', now())
+        ->update(['status' => 'expirado']);
+
+    // Depois busca a lista para mostrar na tela
         $agendamentos = Agendamento::all();
         $clientes = Cliente::all();
         $profissionais = Profissional::all();

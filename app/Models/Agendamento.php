@@ -40,8 +40,9 @@ class Agendamento extends Model
         'profissional_id',
         'data',
         'hora',
-        'status',              // SINTAXE: String. SEMÂNTICA: Armazena o estado do serviço (ex: pendente, concluído).
-        'valor_comissao_pago', // SINTAXE: Decimal. SEMÂNTICA: Guarda o valor em Reais da comissão calculada no dia.
+        'status',
+        
+        'valor_comissao_pago', // SINTAXE: Decimal. SEMÂNTICA: Guarda o valor em Reais da comissão calculada no day.
 
     ];
 

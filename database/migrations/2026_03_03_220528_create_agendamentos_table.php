@@ -86,7 +86,7 @@ return new class extends Migration
              */
             $table->decimal('valor_comissao_pago', 8, 2)->default(0.00);
 
-            $table->string('pontualidade')->default('em dia');
+            
 
             /*
              * SINTAXE: $table->timestamps();

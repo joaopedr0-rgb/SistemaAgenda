@@ -22,6 +22,7 @@
                         <th>Profissional</th>
                         <th>Serviço</th>
                         <th class="text-center">Data/Hora</th>
+                        <th class="text-center">Status</th>
                         <th class="text-end pe-4">Ações</th>
                     </tr>
                 </thead>
@@ -40,6 +41,19 @@
                             <td class="text-center">
                                 <div class="fw-bold">{{ \Carbon\Carbon::parse($agendamento->data)->format('d/m/Y') }}</div>
                                 <small class="text-muted">{{ \Carbon\Carbon::parse($agendamento->hora)->format('H:i') }}</small>
+                            </td>
+                            <td class="text-center">
+                                @php
+                                    $statusClass = match($agendamento->status) {
+                                        'pendente' => 'bg-warning text-dark',
+                                        'concluído' => 'bg-success text-white',
+                                        'cancelado' => 'bg-danger text-white',
+                                        default => 'bg-secondary text-white',
+                                    };
+                                @endphp
+                                <span class="badge {{ $statusClass }}">
+                                    {{ ucfirst($agendamento->status) }}
+                                </span>
                             </td>
                             <td class="text-end pe-4">
                                 <a href="{{ route('agendamentos.edit', $agendamento->id) }}" class="btn btn-sm btn-edit-custom me-1">Editar</a>

@@ -6,6 +6,7 @@
  * para que este arquivo de rotas saiba exatamente onde procurar a lógica de cada URL.
  */
 use Illuminate\Support\Facades\Route;
+use Illuminate\Console\Scheduling\Schedule;
 use App\Http\Controllers\ClientesController;
 use App\Http\Controllers\ProfissionaisController;
 use App\Http\Controllers\ServicosController;
@@ -27,6 +28,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 */
 
 // Rota principal: assim que o sistema abre (localhost:8000), redireciona direto para o cadastro
+Schedule::command('app:update-expired-appointments')->everyMinute();
 Route::get('/', function () {
     return redirect()->route('login');
 });
