@@ -128,7 +128,7 @@
             });
         }
 
-        // Inicialização e Observador de Tema (Responsividade de Cor)
+        
         document.addEventListener('DOMContentLoaded', renderCharts);
         const observer = new MutationObserver(() => renderCharts());
         observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
